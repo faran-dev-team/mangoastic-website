@@ -11,8 +11,17 @@ module.exports = {
         mango: '#FFA30A',
       },
       fontFamily: {
-        outfit: ['Outfit', 'sans-serif'],
-        sirelia: ['Playfair Display', 'serif'],
+        outfit: ['var(--font-outfit)', 'system-ui', 'sans-serif'],
+        sirelia: ['var(--font-sirelia)', 'Georgia', 'serif'],
+      },
+      keyframes: {
+        'press-marquee': {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+      },
+      animation: {
+        'press-marquee': 'press-marquee 50s linear infinite',
       },
     },
   },
