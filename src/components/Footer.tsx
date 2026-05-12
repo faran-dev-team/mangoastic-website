@@ -1,11 +1,142 @@
-import React from "react";
+"use client";
+
+import Link from "next/link";
+import { FormEvent, useState } from "react";
+
+const shopLinks = [
+  { label: "Classic 7kg", href: "/products/mangoastic-classic-7kg" },
+  { label: "Family 10kg", href: "/products/mangoastic-family-10kg" },
+  { label: "Mixed Discovery", href: "/products/mixed-premium-discovery-7kg" },
+  { label: "The Gift Edit", href: "/products/gift-edit-5kg", highlight: true },
+  { label: "Season Pass", href: "/season-pass" },
+] as const;
+
+const discoverLinks = [
+  { label: "The Orchard", href: "/orchard" },
+  { label: "Why Mangoastic", href: "/orchard" },
+  { label: "Season Pass", href: "/season-pass" },
+] as const;
+
+const helpLinks = [
+  { label: "FAQ", href: "/contact" },
+  { label: "Contact", href: "/contact" },
+  { label: "Corporate", href: "/corporate" },
+] as const;
 
 export default function Footer() {
+  const [email, setEmail] = useState("");
+  const [sent, setSent] = useState(false);
+
+  function onNotify(e: FormEvent) {
+    e.preventDefault();
+    if (!email.trim()) return;
+    setSent(true);
+  }
+
   return (
-    <footer className="w-full border-t bg-white/50 text-sm text-zinc-600">
-      <div className="mx-auto max-w-6xl px-6 py-6 text-center">
-        © Mangoastic 2026 · <a href="/contact" className="underline">Contact</a>
+    <footer className="w-full min-w-0 bg-black text-zinc-400">
+      <div className="mx-auto w-full max-w-7xl px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-24 xl:px-16">
+        <div className="grid w-full grid-cols-1 gap-12 sm:grid-cols-2 sm:gap-x-10 lg:grid-cols-12 lg:gap-x-14 lg:gap-y-10">
+          {/* Brand + newsletter — wider column */}
+          <div className="lg:col-span-5 lg:pr-6">
+            <p className="font-sirelia text-3xl font-normal text-white sm:text-4xl">
+              Mangoastic
+            </p>
+            <p className="mt-4 max-w-md font-outfit text-sm leading-relaxed text-zinc-400 sm:text-[0.9375rem]">
+              Pakistan&apos;s single-orchard premium mango brand. From our family
+              farm near Multan. Delivered same-day across Islamabad, Rawalpindi,
+              Lahore, and Karachi.
+            </p>
+
+            <p className="mt-10 font-outfit text-[10px] font-semibold uppercase leading-snug tracking-[0.18em] text-amber-500/85 sm:text-[11px] sm:tracking-[0.2em]">
+              Get one message before each variety drops
+            </p>
+            <form
+              onSubmit={onNotify}
+              className="mt-4 flex max-w-md flex-col gap-3 sm:flex-row sm:items-stretch"
+            >
+              <label htmlFor="footer-newsletter-email" className="sr-only">
+                Email for variety alerts
+              </label>
+              <input
+                id="footer-newsletter-email"
+                type="email"
+                name="email"
+                autoComplete="email"
+                placeholder="you@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="min-h-[48px] flex-1 rounded-full border border-zinc-600 bg-zinc-900/90 px-5 font-outfit text-sm text-white placeholder:text-zinc-500 outline-none transition focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/30"
+              />
+              <button
+                type="submit"
+                className="min-h-[48px] shrink-0 rounded-full bg-[#FDB022] px-6 font-outfit text-xs font-bold uppercase tracking-[0.12em] text-black shadow-[0_0_24px_-4px_rgba(253,176,34,0.45)] transition hover:bg-[#ffc53d] sm:px-8"
+              >
+                {sent ? "You're on the list" : "Notify me"}
+              </button>
+            </form>
+          </div>
+
+          <div className="sm:col-span-1 lg:col-span-2">
+            <p className="font-outfit text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-500/85">
+              Shop
+            </p>
+            <ul className="mt-5 space-y-3 font-outfit text-sm">
+              {shopLinks.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className={
+                      "highlight" in item && item.highlight
+                        ? "text-amber-400/95 transition hover:text-amber-300"
+                        : "text-zinc-400 transition hover:text-white"
+                    }
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="sm:col-span-1 lg:col-span-2">
+            <p className="font-outfit text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-500/85">
+              Discover
+            </p>
+            <ul className="mt-5 space-y-3 font-outfit text-sm">
+              {discoverLinks.map((item) => (
+                <li key={item.label}>
+                  <Link
+                    href={item.href}
+                    className="text-zinc-400 transition hover:text-white"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="sm:col-span-1 lg:col-span-2">
+            <p className="font-outfit text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-500/85">
+              Help
+            </p>
+            <ul className="mt-5 space-y-3 font-outfit text-sm">
+              {helpLinks.map((item) => (
+                <li key={item.label}>
+                  <Link
+                    href={item.href}
+                    className="text-zinc-400 transition hover:text-white"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </div>
+
     </footer>
   );
 }
