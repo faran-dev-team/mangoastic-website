@@ -10,6 +10,10 @@ module.exports = {
       colors: {
         mango: '#FFA30A',
       },
+      fontFamily: {
+        outfit: ['Outfit', 'sans-serif'],
+        sirelia: ['Playfair Display', 'serif'],
+      },
     },
   },
   plugins: [require('daisyui')],
