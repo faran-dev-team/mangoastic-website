@@ -21,6 +21,10 @@ export const metadata: Metadata = {
   title: "Mangoastic — Premium Mangoes Delivered",
   description:
     "Single-orchard mangoes hand-picked and delivered across Pakistan.",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
