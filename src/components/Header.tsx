@@ -10,6 +10,7 @@ export default function Header() {
   const navItems = [
     { label: "SHOP", href: "/shop" },
     { label: "ORCHARD", href: "/orchard" },
+    { label: "WHY US", href: "/why" },
     { label: "CORPORATE", href: "/corporate" },
     { label: "SEASON PASS", href: "/season-pass" },
     { label: "JOURNAL", href: "/journal" },
@@ -23,7 +24,10 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full bg-gradient-to-b from-black/80 to-black/40 backdrop-blur-md">
       <nav className="mx-auto flex items-center justify-between px-4 py-2 sm:px-6 sm:py-3 lg:px-8">
         {/* Logo */}
-        <Link href="/" className="mr-6 flex h-9 flex-shrink-0 items-center overflow-hidden sm:h-10 lg:h-12">
+        <Link
+          href="/"
+          className="mr-6 flex h-9 flex-shrink-0 items-center overflow-hidden sm:h-10 lg:h-12"
+        >
           <img
             src="/images/logo-mangoastic.svg"
             alt="Mangoastic"
