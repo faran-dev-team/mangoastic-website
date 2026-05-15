@@ -13,7 +13,7 @@ export default function Header() {
     { label: "WHY US", href: "/why" },
     { label: "CORPORATE", href: "/corporate" },
     { label: "SEASON PASS", href: "/season-pass" },
-    { label: "JOURNAL", href: "/journal" },
+    { label: "FAQ", href: "/faq" },
   ];
 
   const toggleMenu = () => {

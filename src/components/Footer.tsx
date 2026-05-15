@@ -13,7 +13,7 @@ const shopLinks = [
 
 const discoverLinks = [
   { label: "The Orchard", href: "/orchard" },
-  { label: "Why Mangoastic", href: "/orchard" },
+  { label: "Why Mangoastic", href: "/why" },
   { label: "Season Pass", href: "/season-pass" },
 ] as const;
 
@@ -136,7 +136,6 @@ export default function Footer() {
           </div>
         </div>
       </div>
-
     </footer>
   );
 }
