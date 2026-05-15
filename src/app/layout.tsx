@@ -34,8 +34,12 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${outfit.variable} ${sirelia.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col font-outfit">
+      <body
+        className="min-h-full flex flex-col font-outfit"
+        suppressHydrationWarning
+      >
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

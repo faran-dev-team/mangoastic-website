@@ -18,7 +18,7 @@ const discoverLinks = [
 ] as const;
 
 const helpLinks = [
-  { label: "FAQ", href: "/contact" },
+  { label: "FAQ", href: "/faq" },
   { label: "Contact", href: "/contact" },
   { label: "Corporate", href: "/corporate" },
 ] as const;
@@ -43,7 +43,7 @@ export default function Footer() {
               Mangoastic
             </p>
             <p className="mt-4 max-w-md font-outfit text-sm leading-relaxed text-zinc-400 sm:text-[0.9375rem]">
-              Pakistan&apos;s single-orchard premium mango brand. From our family
+              Pakistan's single-orchard premium mango brand. From our family
               farm near Multan. Delivered same-day across Islamabad, Rawalpindi,
               Lahore, and Karachi.
             </p>

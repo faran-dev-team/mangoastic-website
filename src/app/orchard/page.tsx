@@ -74,18 +74,18 @@ export default function OrchardPage() {
               Mangoastic exists because we got tired of that. Tired of the
               mandi. Tired of the middleman. Tired of the slow erasure of a
               thing we'd grown for three generations into a commodity called
-              &apos;fruit, premium grade A.&apos;
+              'fruit, premium grade A.'
             </p>
             <p>
               So in 2026, we cut out the chain. We hand-pick at dawn. We grade
               twice - once at the tree, once on the line. We reject about 40
-              percent of every day&apos;s pick. We pack our mangoes ourselves,
+              percent of every day's pick. We pack our mangoes ourselves,
               in boxes we designed, with cards we wrote, and we ship them to
               your door under our own name.
             </p>
             <p>
               This is a slow business. There are no shortcuts. The trees
-              don&apos;t care about our growth rate. They give us 18 weeks a
+              don't care about our growth rate. They give us 18 weeks a
               year, and what we do with those 18 weeks is the whole story.
             </p>
             <p>Welcome to the orchard.</p>
@@ -198,11 +198,11 @@ export default function OrchardPage() {
             {[
               [
                 "ONE ORCHARD.",
-                "Every mango in every Mangoastic box came from our trees. Not a partner orchard. Not &apos;sourced from the region.&apos; Ours.",
+                "Every mango in every Mangoastic box came from our trees. Not a partner orchard. Not 'sourced from the region.' Ours.",
               ],
               [
                 "REJECTED TWICE.",
-                "Once at the tree, once on the line. 40% of every day&apos;s pick never reaches you. That&apos;s the cost of getting it right.",
+                "Once at the tree, once on the line. 40% of every day's pick never reaches you. That's the cost of getting it right.",
               ],
               [
                 "DELIVERED FAST.",
@@ -243,7 +243,7 @@ export default function OrchardPage() {
             href="/shop"
             className="inline-flex items-center justify-center rounded-full bg-amber-500 px-6 py-3.5 font-outfit text-sm font-semibold uppercase tracking-[0.12em] text-black transition hover:bg-amber-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300"
           >
-            Order This Season&apos;s Box
+            Order This Season's Box
           </Link>
         </div>
       </div>
