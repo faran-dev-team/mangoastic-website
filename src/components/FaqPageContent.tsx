@@ -70,7 +70,7 @@ export default function FaqPageContent() {
             />
             <input
               id="faq-search"
-              type="search"
+              type="text"
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
@@ -101,11 +101,10 @@ export default function FaqPageContent() {
                 setActiveCategory(null);
                 setOpenKey(null);
               }}
-              className={`rounded-full border px-3.5 py-1.5 font-outfit text-[11px] font-semibold uppercase tracking-[0.14em] transition sm:text-xs ${
-                activeCategory === null
+              className={`rounded-full border px-3.5 py-1.5 font-outfit text-[11px] font-semibold uppercase tracking-[0.14em] transition sm:text-xs ${activeCategory === null
                   ? "border-mango/60 bg-mango/15 text-mango"
                   : "border-zinc-700 text-zinc-500 hover:border-zinc-500 hover:text-white"
-              }`}
+                }`}
             >
               All
             </button>
@@ -119,11 +118,10 @@ export default function FaqPageContent() {
                   );
                   setOpenKey(null);
                 }}
-                className={`rounded-full border px-3.5 py-1.5 font-outfit text-[11px] font-semibold uppercase tracking-[0.14em] transition sm:text-xs ${
-                  activeCategory === category.id
+                className={`rounded-full border px-3.5 py-1.5 font-outfit text-[11px] font-semibold uppercase tracking-[0.14em] transition sm:text-xs ${activeCategory === category.id
                     ? "border-mango/60 bg-mango/15 text-mango"
                     : "border-zinc-700 text-zinc-500 hover:border-zinc-500 hover:text-white"
-                }`}
+                  }`}
               >
                 {category.title}
               </button>
@@ -210,11 +208,10 @@ export default function FaqPageContent() {
                               {item.question}
                             </span>
                             <ChevronRight
-                              className={`mt-0.5 h-5 w-5 shrink-0 text-zinc-500 transition-transform duration-300 ${
-                                isOpen
+                              className={`mt-0.5 h-5 w-5 shrink-0 text-zinc-500 transition-transform duration-300 ${isOpen
                                   ? "rotate-90 text-mango"
                                   : "group-hover:text-mango/80"
-                              }`}
+                                }`}
                               strokeWidth={2}
                               aria-hidden
                             />
