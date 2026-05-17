@@ -5,16 +5,17 @@ export default function SeasonPassHero() {
   return (
     <section className="relative min-h-[72vh] overflow-hidden bg-black sm:min-h-[78vh] lg:min-h-[82vh]">
       <Image
-        src="/images/hero.png"
-        alt="Ripe Chaunsa mango — Mangoastic season pass"
+        src="/images/seasonpass.jpg"
+        alt="Fresh mangoes sliced on a bamboo mat — Mangoastic season pass"
         fill
         priority
-        className="object-cover"
+        className="object-cover object-center brightness-[0.62] saturate-[0.92]"
         sizes="100vw"
       />
 
-      <div className="absolute inset-0 bg-gradient-to-r from-black/92 via-black/78 to-black/50" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/25" />
+      <div className="absolute inset-0 bg-black/40" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/92 via-black/78 to-black/45" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-black/30" />
 
       <div className="relative mx-auto flex min-h-[72vh] max-w-6xl items-center px-4 py-20 sm:min-h-[78vh] sm:px-6 sm:py-24 lg:min-h-[82vh] lg:px-8">
         <div className="max-w-2xl">

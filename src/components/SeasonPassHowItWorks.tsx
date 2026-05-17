@@ -68,8 +68,18 @@ export default function SeasonPassHowItWorks() {
             return (
               <li
                 key={item.step}
-                className="group relative flex flex-col rounded-2xl border border-zinc-800/90 bg-gradient-to-b from-zinc-900/70 to-zinc-950/30 p-6 transition duration-300 hover:border-white/35 hover:shadow-[0_16px_48px_-20px_rgba(0,0,0,0.85)] sm:p-7 lg:p-8"
+                className="group relative overflow-hidden rounded-2xl border border-zinc-800/90 bg-zinc-950/50 p-6 transition duration-300 hover:border-mango/35 hover:shadow-[0_0_0_1px_rgba(255,163,10,0.12),0_20px_50px_-18px_rgba(0,0,0,0.9)] sm:p-7 lg:p-8"
               >
+                <div
+                  className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-mango/25 via-black/55 to-black opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100"
+                  aria-hidden
+                />
+                <div
+                  className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-zinc-900/90 via-black/80 to-black opacity-100 transition-opacity duration-500 group-hover:opacity-0"
+                  aria-hidden
+                />
+
+                <div className="relative z-10 flex flex-col">
                 <div className="flex items-start justify-between gap-4">
                   <span className="font-outfit text-[11px] font-bold uppercase tracking-[0.16em] text-mango">
                     Step {item.step}
@@ -108,6 +118,7 @@ export default function SeasonPassHowItWorks() {
                     item.text
                   )}
                 </p>
+                </div>
               </li>
             );
           })}
