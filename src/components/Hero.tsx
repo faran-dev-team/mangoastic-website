@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { WHATSAPP_ORDER_URL } from "@/data/whatsapp";
 import { ArrowRight, MessageCircle } from "lucide-react";
 
 export default function Hero() {
@@ -50,7 +51,7 @@ Untouched.`}
             </Link>
 
             <a
-              href="https://wa.me/923214567890"
+              href={WHATSAPP_ORDER_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2.5 rounded-full border border-white/40 bg-white/5 px-7 py-3.5 font-outfit text-sm font-semibold text-white backdrop-blur-sm transition hover:border-mango/50 hover:bg-white/10 hover:text-mango focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 sm:px-8"

@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Outfit, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
+import ConversionShell from "@/components/conversion/ConversionShell";
 import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 
 /** PDF brand combo: Outfit (simple UI / body), “Sirelia” = Playfair Display (titles / display). */
 const outfit = Outfit({
@@ -41,8 +42,11 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <Header />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 pb-[calc(4.25rem+env(safe-area-inset-bottom))] md:pb-0">
+          {children}
+        </main>
         <Footer />
+        <ConversionShell />
       </body>
     </html>
   );

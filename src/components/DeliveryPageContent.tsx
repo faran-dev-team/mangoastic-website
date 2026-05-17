@@ -8,9 +8,11 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-const WHATSAPP_SUPPORT_HREF =
-  "https://wa.me/923214567890?text=" +
-  encodeURIComponent("Hi Mangoastic — I need help with delivery or returns.");
+import { whatsappOrderUrl } from "@/data/whatsapp";
+
+const WHATSAPP_SUPPORT_HREF = whatsappOrderUrl(
+  "Hi Mangoastic — I need help with delivery or returns.",
+);
 
 const DELIVERY_ROWS = [
   {

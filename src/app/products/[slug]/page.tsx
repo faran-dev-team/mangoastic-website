@@ -1,3 +1,4 @@
+import { whatsappOrderUrl } from "@/data/whatsapp";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -119,7 +120,11 @@ export default async function ProductPage({ params }: Props) {
                 Back to Shop
               </Link>
               <a
-                href="https://wa.me/923001234567"
+                href={whatsappOrderUrl(
+                  `Hi Mangoastic — I'd like to order ${content.name}.`,
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-full border border-zinc-300 bg-transparent px-5 py-3 font-outfit text-sm font-semibold uppercase tracking-wide text-zinc-900 transition-colors hover:border-zinc-400 hover:bg-zinc-50"
               >
                 Order on WhatsApp

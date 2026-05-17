@@ -1,6 +1,7 @@
 "use client";
 
 import { FAQ_CATEGORIES, type FaqCategory } from "@/data/faq";
+import { whatsappOrderUrl } from "@/data/whatsapp";
 import { ChevronRight, Search, X } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
@@ -151,7 +152,7 @@ export default function FaqPageContent() {
             <p className="py-12 text-center font-outfit text-sm text-zinc-500 sm:text-base">
               No matches. Try another keyword or{" "}
               <a
-                href="https://wa.me/923214567890"
+                href={whatsappOrderUrl("Hi Mangoastic — I have a question from the FAQ.")}
                 className="font-semibold text-mango hover:underline"
               >
                 WhatsApp us

@@ -2,11 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { Download, MessageCircle } from "lucide-react";
 
-const CORPORATE_WHATSAPP_HREF =
-  "https://wa.me/923214567890?text=" +
-  encodeURIComponent(
-    "Hi Mangoastic — I'd like a quote for corporate gifting (boxes, logo, delivery).",
-  );
+import { whatsappCorporateUrl } from "@/data/whatsapp";
+
+const CORPORATE_WHATSAPP_HREF = whatsappCorporateUrl(
+  "Hi Mangoastic — I'd like a quote for corporate gifting (boxes, logo, delivery).",
+);
 
 /** Add your PDF to `public/documents/mangoastic-corporate-catalogue.pdf` */
 const CORPORATE_CATALOGUE_PDF = "/documents/mangoastic-corporate-catalogue.pdf";

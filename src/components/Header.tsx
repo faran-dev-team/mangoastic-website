@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { WHATSAPP_ORDER_URL } from "@/data/whatsapp";
 import { Menu, X, ShoppingCart } from "lucide-react";
 
 export default function Header() {
@@ -52,8 +53,8 @@ export default function Header() {
         <div className="flex items-center gap-4">
           {/* Shopping Cart */}
           <Link
-            href="/shop"
-            className="relative inline-flex items-center text-white transition-colors hover:text-amber-400"
+            href="/cart"
+            className="relative inline-flex items-center text-white transition-colors hover:text-mango"
           >
             <ShoppingCart size={20} />
             <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-amber-500 text-xs font-bold text-black">
@@ -63,7 +64,7 @@ export default function Header() {
 
           {/* WhatsApp Button (Desktop) */}
           <a
-            href="https://wa.me/923214567890"
+            href={WHATSAPP_ORDER_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="hidden items-center gap-2 rounded border border-white px-4 py-2 font-outfit text-xs font-semibold text-white transition-all hover:bg-white hover:text-black sm:inline-flex"
@@ -105,7 +106,7 @@ export default function Header() {
             ))}
             {/* WhatsApp Button (Mobile) */}
             <a
-              href="https://wa.me/923214567890"
+              href={WHATSAPP_ORDER_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-4 flex items-center gap-2 rounded border border-white px-4 py-2 font-outfit text-xs font-semibold text-white transition-all hover:bg-white hover:text-black"

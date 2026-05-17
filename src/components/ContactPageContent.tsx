@@ -5,17 +5,19 @@ import {
   MessageCircle,
   Sparkles,
 } from "lucide-react";
+import { whatsappCorporateUrl } from "@/data/whatsapp";
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 
 /** Swap display numbers before launch; wa.me links use current routing. */
 const WHATSAPP_D2C_DISPLAY = "+92 XXX XXXXXXX";
+/** Contact card — same customer line; not used on “Order on WhatsApp” CTAs. */
 const WHATSAPP_D2C_HREF = "https://wa.me/923214567890";
 
 const WHATSAPP_CORPORATE_DISPLAY = "+92 XXX XXXXXXX";
-const WHATSAPP_CORPORATE_HREF =
-  "https://wa.me/923412764104?text=" +
-  encodeURIComponent("Hi Mangoastic — I'd like to get in touch.");
+const WHATSAPP_CORPORATE_HREF = whatsappCorporateUrl(
+  "Hi Mangoastic — I'd like to get in touch.",
+);
 
 const EMAIL_HELLO = "hello@mangoistic.com";
 const EMAIL_PRESS = "press@mangoistic.com";

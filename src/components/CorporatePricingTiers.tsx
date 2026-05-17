@@ -1,10 +1,10 @@
 import Link from "next/link";
 
-const CORPORATE_WHATSAPP_HREF =
-  "https://wa.me/923214567890?text=" +
-  encodeURIComponent(
-    "Hi Mangoastic — I'd like a quote for 201+ corporate gift boxes.",
-  );
+import { whatsappCorporateUrl } from "@/data/whatsapp";
+
+const CORPORATE_WHATSAPP_HREF = whatsappCorporateUrl(
+  "Hi Mangoastic — I'd like a quote for 201+ corporate gift boxes.",
+);
 
 const TIERS = [
   {

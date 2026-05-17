@@ -3,9 +3,11 @@
 import { FormEvent, useEffect, useState } from "react";
 import { MessageCircle } from "lucide-react";
 
-const CORPORATE_B2B_WHATSAPP =
-  "https://wa.me/923412764104?text=" +
-  encodeURIComponent("Hi Mangoastic — I'd like to speak with your B2B corporate gifting team.");
+import { whatsappCorporateUrl } from "@/data/whatsapp";
+
+const CORPORATE_B2B_WHATSAPP = whatsappCorporateUrl(
+  "Hi Mangoastic — I'd like to speak with your B2B corporate gifting team.",
+);
 
 const QUANTITY_OPTIONS = [
   { value: "25-50", label: "25–50 boxes" },
@@ -118,7 +120,7 @@ export default function CorporateLeadAndClosing() {
     });
 
     window.open(
-      `https://wa.me/923412764104?text=${encodeURIComponent(message)}`,
+      whatsappCorporateUrl(message),
       "_blank",
       "noopener,noreferrer",
     );

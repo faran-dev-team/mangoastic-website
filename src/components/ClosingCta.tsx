@@ -1,4 +1,5 @@
 import React from "react";
+import { WHATSAPP_ORDER_URL } from "@/data/whatsapp";
 import Link from "next/link";
 
 export default function ClosingCta() {
@@ -22,7 +23,7 @@ export default function ClosingCta() {
           </Link>
 
           <a
-            href="https://wa.me/923000000000"
+            href={WHATSAPP_ORDER_URL}
             className="inline-flex items-center justify-center rounded-md border border-zinc-800 px-5 py-3 text-sm font-medium text-zinc-200 hover:border-amber-400"
           >
             WhatsApp Us
