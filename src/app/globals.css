@@ -1,0 +1,173 @@
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --mango: #ffa30a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-outfit);
+}
+
+@layer base {
+  html,
+  body,
+  #__next {
+    height: 100%;
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-outfit), system-ui, sans-serif;
+  }
+}
+
+/* DaisyUI theme tweaks can go here */
+.btn-mango {
+  background-color: var(--mango);
+  color: #fff;
+}
+.btn-mango:hover {
+  background-color: #ff8a00;
+}
+
+/* Reels wall — react-slick + slick-theme (scoped overrides for dark UI) */
+.reels-arrows-wrap.slick-slider {
+  margin-bottom: 1.25rem;
+}
+
+@media (min-width: 1024px) {
+  .reels-arrows-wrap.slick-slider {
+    margin-bottom: 1.75rem;
+  }
+}
+
+
+.reels-arrows-wrap.slick-loading .slick-list {
+  background: rgb(24 24 27);
+}
+
+/* Top padding clears top-right arrows + space under them; bottom = card breathing room */
+.reels-wall-slider .slick-list {
+  margin: 0 -0.25rem;
+  padding: 4.25rem 0 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .reels-wall-slider .slick-list {
+    padding: 4.25rem 0 1.75rem;
+  }
+}
+
+.reels-wall-slider .slick-track {
+  display: flex;
+  align-items: stretch;
+}
+
+.reels-wall-slider .slick-slide > div {
+  height: 100%;
+}
+
+.reels-wall-slider .slick-dots {
+  bottom: 0;
+  width: 100%;
+}
+
+.reels-wall-slider .slick-dots li {
+  margin: 0 3px;
+}
+
+.reels-wall-slider .slick-dots li button:before {
+  font-size: 8px;
+  color: rgb(82 82 91);
+  opacity: 1;
+}
+
+.reels-wall-slider .slick-dots li.slick-active button:before {
+  color: rgb(245 158 11);
+  opacity: 1;
+}
+
+/*
+ * slick-theme sets .slick-prev/.slick-next to font-size:0 and tiny 20×20 boxes —
+ * that breaks Lucide SVGs. Reset and style our custom arrow buttons.
+ */
+.reels-arrows-wrap .slick-prev,
+.reels-arrows-wrap .slick-next {
+  font-size: inherit;
+  line-height: 1;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  z-index: 20;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  border: 1px solid rgb(217 119 6);
+  background: var(--mango);
+  color: rgb(255 255 255);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.2) inset,
+    0 8px 20px -6px rgba(0, 0, 0, 0.45);
+  transition:
+    border-color 0.2s,
+    color 0.2s,
+    background 0.2s,
+    box-shadow 0.2s;
+  top: 0.75rem !important;
+  bottom: auto !important;
+  margin-bottom: 0.75rem;
+  transform: none !important;
+  -webkit-transform: none !important;
+}
+
+.reels-arrows-wrap .slick-next {
+  right: 0.75rem !important;
+  left: auto !important;
+}
+
+.reels-arrows-wrap .slick-prev {
+  right: calc(0.75rem + 2.75rem + 0.5rem) !important;
+  left: auto !important;
+}
+
+@media (min-width: 1024px) {
+  .reels-arrows-wrap .slick-next {
+    right: 1rem !important;
+  }
+
+  .reels-arrows-wrap .slick-prev {
+    right: calc(1rem + 2.75rem + 0.5rem) !important;
+  }
+}
+
+.reels-arrows-wrap .slick-prev:hover,
+.reels-arrows-wrap .slick-prev:focus,
+.reels-arrows-wrap .slick-next:hover,
+.reels-arrows-wrap .slick-next:focus {
+  color: rgb(255 255 255);
+  background: rgb(255 140 0);
+  border-color: rgb(194 65 12);
+  outline: none;
+}
+
+.reels-arrows-wrap .slick-prev:before,
+.reels-arrows-wrap .slick-next:before {
+  display: none !important;
+}
+
+.reels-arrows-wrap .slick-prev.slick-disabled,
+.reels-arrows-wrap .slick-next.slick-disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
