@@ -1,10 +1,32 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
-import { MessageCircle } from "lucide-react";
+import { FormEvent, useEffect, useRef, useState } from "react";
+import { ArrowRight, MessageCircle } from "lucide-react";
+import { motion, useReducedMotion, Variants } from "framer-motion";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+
+const containerVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.1 },
+  },
+};
+
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 36, filter: "blur(8px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.85, ease: "easeOut" },
+  },
+};
 
 const CORPORATE_B2B_WHATSAPP =
-  "https://wa.me/923412764104?text=" +
+  "https://wa.me/923214567890?text=" +
   encodeURIComponent("Hi Mangoastic — I'd like to speak with your B2B corporate gifting team.");
 
 const QUANTITY_OPTIONS = [
@@ -54,6 +76,10 @@ function buildQuoteWhatsAppMessage(data: {
 }
 
 export default function CorporateLeadAndClosing() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const closingRef = useRef<HTMLDivElement | null>(null);
+  const prefersReducedMotion = useReducedMotion();
+
   const [company, setCompany] = useState("");
   const [name, setName] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
@@ -69,6 +95,32 @@ export default function CorporateLeadAndClosing() {
   useEffect(() => {
     setMinDeliveryDate(new Date().toISOString().split("T")[0]);
   }, []);
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        ".corp-closing-reveal",
+        { opacity: 0, y: 50, filter: "blur(10px)" },
+        {
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+          duration: 1.1,
+          ease: "power3.out",
+          stagger: 0.14,
+          scrollTrigger: {
+            trigger: closingRef.current,
+            start: "top 85%",
+            once: true,
+          },
+        },
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, [prefersReducedMotion]);
 
   function toggleCity(city: string) {
     setCities((prev) =>
@@ -131,23 +183,56 @@ export default function CorporateLeadAndClosing() {
     "block font-outfit text-xs font-medium uppercase tracking-[0.1em] text-zinc-400";
 
   return (
-    <section className="border-t border-zinc-800/80 bg-black">
-      <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-16 md:px-8 md:py-20">
-        <p className="font-outfit text-[10px] font-semibold uppercase tracking-[0.22em] text-mango sm:text-xs">
-          Get a quote
-        </p>
-        <h2
-          id="corporate-lead-heading"
-          className="mt-3 font-sirelia text-2xl font-normal tracking-tight text-white sm:text-3xl"
+    <section
+      ref={sectionRef}
+      className="relative overflow-hidden border-t border-zinc-800/80 bg-black"
+    >
+      <motion.div
+        className="corp-form-glow absolute left-1/2 top-[20%] h-[320px] w-[320px] -translate-x-1/2 rounded-full bg-mango/8 blur-3xl"
+        animate={prefersReducedMotion ? undefined : { y: [0, -16, 0] }}
+        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        initial={{ scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
+        className="absolute inset-x-0 top-0 h-px origin-left bg-gradient-to-r from-transparent via-white/10 to-transparent"
+      />
+
+      <motion.div className="relative z-10 mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-16 md:px-8 md:py-20">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
         >
-          Tell us what you need
-        </h2>
-        <p className="mt-3 max-w-xl font-outfit text-sm text-zinc-400 sm:text-base">
-          We respond within 4 hours on business days.
-        </p>
+          <motion.p
+            variants={fadeUp}
+            className="font-outfit text-[10px] font-semibold uppercase tracking-[0.22em] text-mango sm:text-xs"
+          >
+            Get a quote
+          </motion.p>
+          <motion.h2
+            variants={fadeUp}
+            id="corporate-lead-heading"
+            className="mt-3 font-sirelia text-2xl font-normal tracking-tight text-white sm:text-3xl"
+          >
+            Tell us what you need
+          </motion.h2>
+          <motion.p
+            variants={fadeUp}
+            className="mt-3 max-w-xl font-outfit text-sm text-zinc-400 sm:text-base"
+          >
+            We respond within 4 hours on business days.
+          </motion.p>
+        </motion.div>
 
         {submitted ? (
-          <div
+          <motion.div
+            initial={{ opacity: 0, y: 24, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
             className="mt-10 rounded-2xl border border-mango/30 bg-zinc-950/80 p-8 sm:p-10"
             role="status"
           >
@@ -161,18 +246,22 @@ export default function CorporateLeadAndClosing() {
             <button
               type="button"
               onClick={() => setSubmitted(false)}
-              className="mt-6 font-outfit text-sm font-semibold text-mango underline-offset-2 hover:underline"
+              className="mt-6 cursor-pointer font-outfit text-sm font-semibold text-mango underline-offset-2 hover:underline"
             >
               Submit another request
             </button>
-          </div>
+          </motion.div>
         ) : (
-          <form
+          <motion.form
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }}
             onSubmit={onSubmit}
             className="mt-10 grid gap-6 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-7"
             noValidate
           >
-            <div>
+            <motion.div variants={fadeUp}>
               <label htmlFor="corp-company" className={labelClass}>
                 Company name <span className="text-mango">*</span>
               </label>
@@ -186,9 +275,9 @@ export default function CorporateLeadAndClosing() {
                 onChange={(e) => setCompany(e.target.value)}
                 className={inputClass}
               />
-            </div>
+            </motion.div>
 
-            <div>
+            <motion.div variants={fadeUp}>
               <label htmlFor="corp-name" className={labelClass}>
                 Your name <span className="text-mango">*</span>
               </label>
@@ -202,9 +291,9 @@ export default function CorporateLeadAndClosing() {
                 onChange={(e) => setName(e.target.value)}
                 className={inputClass}
               />
-            </div>
+            </motion.div>
 
-            <div>
+            <motion.div variants={fadeUp}>
               <label htmlFor="corp-whatsapp" className={labelClass}>
                 WhatsApp number <span className="text-mango">*</span>
               </label>
@@ -219,9 +308,9 @@ export default function CorporateLeadAndClosing() {
                 onChange={(e) => setWhatsapp(e.target.value)}
                 className={inputClass}
               />
-            </div>
+            </motion.div>
 
-            <div>
+            <motion.div variants={fadeUp}>
               <label htmlFor="corp-email" className={labelClass}>
                 Email <span className="text-mango">*</span>
               </label>
@@ -235,9 +324,9 @@ export default function CorporateLeadAndClosing() {
                 onChange={(e) => setEmail(e.target.value)}
                 className={inputClass}
               />
-            </div>
+            </motion.div>
 
-            <div>
+            <motion.div variants={fadeUp}>
               <label htmlFor="corp-quantity" className={labelClass}>
                 Approximate box quantity <span className="text-mango">*</span>
               </label>
@@ -260,9 +349,9 @@ export default function CorporateLeadAndClosing() {
                   </option>
                 ))}
               </select>
-            </div>
+            </motion.div>
 
-            <div>
+            <motion.div variants={fadeUp}>
               <label htmlFor="corp-delivery-date" className={labelClass}>
                 Target delivery date
               </label>
@@ -275,21 +364,27 @@ export default function CorporateLeadAndClosing() {
                 onChange={(e) => setDeliveryDate(e.target.value)}
                 className={`${inputClass} [color-scheme:dark]`}
               />
-            </div>
+            </motion.div>
 
-            <fieldset className="sm:col-span-2">
+            <motion.fieldset variants={fadeUp} className="sm:col-span-2">
               <legend className={labelClass}>
                 City / cities <span className="text-mango">*</span>
               </legend>
-              <div className="mt-3 flex flex-wrap gap-2">
+              <motion.div
+                variants={containerVariants}
+                className="mt-3 flex flex-wrap gap-2"
+              >
                 {DELIVERY_CITIES.map((city) => {
                   const selected = cities.includes(city);
                   return (
-                    <button
+                    <motion.button
                       key={city}
                       type="button"
+                      variants={fadeUp}
+                      whileHover={{ scale: 1.05, y: -2 }}
+                      whileTap={{ scale: 0.97 }}
                       onClick={() => toggleCity(city)}
-                      className={`rounded-full border px-4 py-2 font-outfit text-xs font-medium transition sm:text-sm ${
+                      className={`cursor-pointer rounded-full border px-4 py-2 font-outfit text-xs font-medium transition sm:text-sm ${
                         selected
                           ? "border-mango bg-mango/15 text-mango"
                           : "border-zinc-700 text-zinc-300 hover:border-zinc-500 hover:text-white"
@@ -297,13 +392,13 @@ export default function CorporateLeadAndClosing() {
                       aria-pressed={selected}
                     >
                       {city}
-                    </button>
+                    </motion.button>
                   );
                 })}
-              </div>
-            </fieldset>
+              </motion.div>
+            </motion.fieldset>
 
-            <div className="sm:col-span-2">
+            <motion.div variants={fadeUp} className="sm:col-span-2">
               <label htmlFor="corp-requirements" className={labelClass}>
                 Special requirements{" "}
                 <span className="normal-case tracking-normal text-zinc-500">
@@ -319,46 +414,61 @@ export default function CorporateLeadAndClosing() {
                 placeholder="Logo files, delivery windows, recipient list format…"
                 className={`${inputClass} resize-y min-h-[7rem]`}
               />
-            </div>
+            </motion.div>
 
             {error && (
-              <p
+              <motion.p
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
                 className="sm:col-span-2 font-outfit text-sm text-red-400"
                 role="alert"
               >
                 {error}
-              </p>
+              </motion.p>
             )}
 
-            <div className="sm:col-span-2">
+            <motion.div variants={fadeUp} className="sm:col-span-2">
               <button
                 type="submit"
-                className="inline-flex w-full items-center justify-center rounded-full bg-mango px-8 py-4 font-outfit text-sm font-bold uppercase tracking-[0.08em] text-black shadow-[0_0_28px_-4px_rgba(255,163,10,0.45)] transition hover:bg-mango/90 sm:w-auto sm:min-w-[280px]"
+                className="group relative inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-full bg-mango px-8 py-4 font-outfit text-sm font-semibold text-black shadow-[0_0_40px_-10px_rgba(255,163,10,0.55)] transition-all duration-500 hover:scale-[1.03] hover:shadow-[0_0_60px_-8px_rgba(255,163,10,0.8)] w-full sm:w-auto sm:min-w-[280px]"
               >
-                Get My Quote — within 4 hours
+                <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
+                <span className="relative z-10 flex items-center gap-2.5">
+                  Get My Quote — within 4 hours
+                  <ArrowRight
+                    className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1.5"
+                    strokeWidth={2.5}
+                  />
+                </span>
               </button>
-            </div>
-          </form>
+            </motion.div>
+          </motion.form>
         )}
-      </div>
+      </motion.div>
 
-      <div className="mx-auto mt-16 flex max-w-6xl flex-col items-center border-t border-zinc-800/80 px-4 pt-14 text-center sm:mt-20 sm:px-6 sm:pt-16 md:px-8 md:pt-20">
-        <p className="max-w-2xl font-outfit text-base leading-relaxed text-zinc-300 sm:text-lg">
+      <motion.div
+        ref={closingRef}
+        className="relative z-10 mx-auto mt-16 flex max-w-6xl flex-col items-center border-t border-zinc-800/80 px-4 pt-14 text-center sm:mt-20 sm:px-6 sm:pt-16 md:px-8 md:pt-20"
+      >
+        <p className="corp-closing-reveal max-w-2xl font-outfit text-base leading-relaxed text-zinc-300 sm:text-lg">
           Or skip the form and just WhatsApp our B2B line. We answer.
         </p>
-        <a
+        <motion.a
           href={CORPORATE_B2B_WHATSAPP}
           target="_blank"
           rel="noopener noreferrer"
-          className="group mt-8 inline-flex items-center justify-center gap-2 rounded-full border border-white/40 bg-white/5 px-8 py-4 font-outfit text-sm font-semibold text-white backdrop-blur-sm transition hover:border-white/60 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50"
+          whileHover={{ scale: 1.03, y: -4 }}
+          whileTap={{ scale: 0.98 }}
+          transition={{ type: "spring", stiffness: 320, damping: 20 }}
+          className="corp-closing-reveal group mt-8 inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-white/40 bg-white/5 px-8 py-4 font-outfit text-sm font-semibold text-white backdrop-blur-sm transition hover:border-white/60 hover:bg-white/10 hover:shadow-[0_0_35px_-12px_rgba(255,163,10,0.35)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50"
         >
           <MessageCircle
             className="h-5 w-5 shrink-0 text-white transition-colors duration-300 group-hover:text-mango"
             strokeWidth={2.25}
           />
           WhatsApp Our B2B Line
-        </a>
-      </div>
+        </motion.a>
+      </motion.div>
     </section>
   );
 }

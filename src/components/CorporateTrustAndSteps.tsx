@@ -1,19 +1,19 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import Image from "next/image";
+import { motion, Variants } from "framer-motion";
+import gsap from "gsap";
 
-/** Trust strip hidden until at least this many client logos exist (no placeholders). */
-const MIN_TRUST_LOGOS = 6;
+const MIN_TRUST_LOGOS = 3;
 
-/**
- * Companies we've gifted — replace dev placeholders with real logos under `public/images/corporate/`.
- * Section 2 hidden until `length >= MIN_TRUST_LOGOS`.
- */
 const TRUST_LOGOS: { alt: string; src: string }[] = [
-  { alt: "Client logo placeholder", src: "/images/hero.png" },
-  { alt: "Client logo placeholder", src: "/images/hero.png" },
-  { alt: "Client logo placeholder", src: "/images/hero.png" },
-  { alt: "Client logo placeholder", src: "/images/hero.png" },
-  { alt: "Client logo placeholder", src: "/images/hero.png" },
-  { alt: "Client logo placeholder", src: "/images/hero.png" },
+  { alt: "Client logo — replace with brand asset", src: "/images/box-family.jpg" },
+  { alt: "Client logo — replace with brand asset", src: "/images/box-gift.jpg" },
+  { alt: "Client logo — replace with brand asset", src: "/images/mango2.jpg" },
+  { alt: "Client logo — replace with brand asset", src: "/images/seasonpass.jpg" },
+  { alt: "Client logo — replace with brand asset", src: "/images/box-family.jpg" },
+  { alt: "Client logo — replace with brand asset", src: "/images/box-gift.jpg" },
 ];
 
 const STEPS = [
@@ -31,44 +31,107 @@ const STEPS = [
   },
 ] as const;
 
-function TrustStrip() {
-  if (TRUST_LOGOS.length < MIN_TRUST_LOGOS) {
-    return null;
-  }
+const containerVariants: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.16 } },
+};
 
-  const logos = TRUST_LOGOS.slice(0, 12);
-  const track = [...logos, ...logos];
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.9, ease: "easeOut" },
+  },
+};
+
+const stepVariants: Variants = {
+  hidden: { opacity: 0, y: 36, filter: "blur(8px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.85, ease: "easeOut" },
+  },
+};
+
+function TrustStrip() {
+  const stripRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.to(".corp-trust-shine", {
+        x: "140%",
+        duration: 3,
+        repeat: -1,
+        repeatDelay: 5,
+        ease: "power2.inOut",
+      });
+      gsap.to(".corp-trust-track", {
+        y: -5,
+        duration: 3.5,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+    }, stripRef);
+    return () => ctx.revert();
+  }, []);
+
+  if (TRUST_LOGOS.length < MIN_TRUST_LOGOS) return null;
+
+  const track = [...TRUST_LOGOS, ...TRUST_LOGOS];
 
   return (
-    <div
-      className="border-b border-zinc-800/80 pb-14 sm:pb-16"
+    <motion.div
+      ref={stripRef}
+      variants={fadeUp}
+      className="border-b border-zinc-800/80 pb-12 sm:pb-14"
       aria-label="Companies we've gifted"
     >
-      <p className="text-center font-outfit text-[10px] font-semibold uppercase tracking-[0.22em] text-white sm:text-xs">
-        Companies we&apos;ve gifted
-      </p>
+      <div className="text-center">
+        <p className="font-outfit text-[10px] font-semibold uppercase tracking-[0.24em] text-zinc-500 sm:text-xs">
+          Trusted by teams across Pakistan
+        </p>
+        <h3 className="mt-3 font-sirelia text-2xl font-normal tracking-tight text-white sm:text-3xl">
+          Companies we&apos;ve gifted
+        </h3>
+        <motion.div
+          initial={{ opacity: 0, scaleX: 0 }}
+          whileInView={{ opacity: 1, scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2, duration: 1, ease: "easeOut" }}
+          className="mx-auto mt-5 h-px w-20 origin-center bg-gradient-to-r from-transparent via-amber-500 to-transparent"
+        />
+      </div>
 
-      <div className="relative mt-8 overflow-hidden py-2 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
-        <div className="flex w-max animate-press-marquee items-center hover:[animation-play-state:paused]">
+      <motion.div className="relative mt-8 overflow-hidden py-6 sm:py-8 [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
+        <motion.div className="pointer-events-none absolute inset-y-0 left-[-30%] z-20 w-[20%] skew-x-[-25deg] bg-gradient-to-r from-transparent via-white/10 to-transparent blur-xl corp-trust-shine" />
+
+        <motion.div className="corp-trust-track flex w-max animate-press-marquee items-center hover:[animation-play-state:paused]">
           {track.map((logo, index) => (
-            <div
+            <motion.div
               key={`${logo.src}-${index}`}
-              className="mx-5 shrink-0 sm:mx-8 md:mx-10"
+              whileHover={{ y: -5, scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 220, damping: 18 }}
+              className="mx-6 flex h-12 w-28 shrink-0 items-center justify-center sm:mx-10 sm:h-14 sm:w-36 md:mx-14"
             >
-              <div className="relative h-12 w-32 overflow-hidden rounded-lg border border-zinc-800/90 bg-zinc-900/80 shadow-sm sm:h-14 sm:w-36">
+              <motion.div className="group relative h-full w-full opacity-70 transition duration-500 hover:opacity-100">
+                <motion.div className="absolute inset-0 rounded-xl bg-amber-500/0 blur-2xl transition duration-500 group-hover:bg-amber-500/10" />
                 <Image
                   src={logo.src}
                   alt={logo.alt}
                   fill
-                  className="object-cover object-center opacity-90 grayscale"
-                  sizes="(max-width: 768px) 128px, 144px"
+                  className="object-contain object-center grayscale transition duration-500 group-hover:scale-[1.04] group-hover:grayscale-0"
+                  sizes="(max-width: 768px) 112px, 144px"
                 />
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           ))}
-        </div>
-      </div>
-    </div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -76,41 +139,66 @@ export default function CorporateTrustAndSteps() {
   const showTrust = TRUST_LOGOS.length >= MIN_TRUST_LOGOS;
 
   return (
-    <section className="border-t border-zinc-800/80 bg-black px-4 py-14 sm:px-6 sm:py-16 md:px-8 md:py-20">
-      <div className="mx-auto max-w-6xl">
+    <section className="relative overflow-hidden border-t border-zinc-800/80 bg-black px-4 py-14 sm:px-6 sm:py-16 md:px-8 md:py-20">
+      <motion.div className="absolute left-[-10%] top-[8%] h-[260px] w-[260px] rounded-full bg-mango/10 blur-3xl" />
+      <motion.div
+        className="absolute bottom-[-15%] right-[-8%] h-[300px] w-[300px] rounded-full bg-orange-500/10 blur-3xl"
+        animate={{ y: [0, -24, 0] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.15 }}
+        className="relative z-10 mx-auto max-w-6xl"
+      >
         <TrustStrip />
 
-        <div
+        <motion.div
           className={showTrust ? "pt-14 sm:pt-16" : undefined}
           aria-labelledby="corporate-how-it-works-heading"
         >
-          <h2
+          <motion.h2
+            variants={fadeUp}
             id="corporate-how-it-works-heading"
             className="font-sirelia text-2xl font-normal tracking-tight text-white sm:text-3xl"
           >
-            How it <span className="text-mango">works</span> 
-          </h2>
+            How it <span className="text-mango">works</span>
+          </motion.h2>
 
-          <ol className="mt-10 grid gap-8 sm:mt-12 sm:grid-cols-3 sm:gap-6 lg:gap-10">
+          <motion.ol
+            variants={containerVariants}
+            className="mt-10 grid gap-8 sm:mt-12 sm:grid-cols-3 sm:gap-6 lg:gap-10"
+          >
             {STEPS.map((item) => (
-              <li
+              <motion.li
                 key={item.step}
-                className="border-t border-zinc-800 pt-6 sm:border-t-0 sm:border-l sm:border-zinc-800 sm:pl-6 sm:pt-0 first:sm:border-l-0 first:sm:pl-0"
+                variants={stepVariants}
+                whileHover={{ y: -8, scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 220, damping: 18 }}
+                className="group relative list-none cursor-default overflow-hidden border-t border-zinc-800 pt-6 sm:border-t-0 sm:border-l sm:border-zinc-800 sm:pl-6 sm:pt-0 first:sm:border-l-0 first:sm:pl-0"
               >
+                <motion.div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100">
+                  <motion.div className="absolute -left-[120%] top-0 h-full w-[80%] rotate-12 bg-gradient-to-r from-transparent via-white/10 to-transparent transition-all duration-1000 group-hover:left-[140%]" />
+                </motion.div>
+
                 <p
-                  className="font-outfit text-3xl font-semibold tabular-nums text-mango sm:text-4xl"
+                  className="relative z-10 font-outfit text-3xl font-semibold tabular-nums text-mango sm:text-4xl"
                   aria-hidden
                 >
                   {item.step}
                 </p>
-                <p className="mt-3 font-outfit text-sm leading-relaxed text-white sm:text-[0.9375rem] sm:leading-relaxed">
+                <p className="relative z-10 mt-3 font-outfit text-sm leading-relaxed text-white sm:text-[0.9375rem] sm:leading-relaxed">
                   {item.text}
                 </p>
-              </li>
+              </motion.li>
             ))}
-          </ol>
-        </div>
-      </div>
+          </motion.ol>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
