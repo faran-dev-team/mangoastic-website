@@ -1,5 +1,7 @@
 "use client";
 
+import { motion, Variants, useReducedMotion } from "framer-motion";
+
 export type Review = {
   name: string;
   location: string;
@@ -32,6 +34,21 @@ function StarRating({ rating }: { rating: number }) {
 }
 
 export function ProductReviews({ reviews }: ProductReviewsProps) {
+  const shouldReduceMotion = useReducedMotion();
+
+  const fadeUp: Variants = {
+    hidden: { opacity: 0, y: 8 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } },
+  };
+
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.06, delayChildren: 0.2 },
+    },
+  };
+
   return (
     <div className="mt-8 rounded-[28px] border border-zinc-200 bg-white p-6 shadow-[0_18px_60px_rgba(47,39,24,0.08)] sm:p-8">
       <div className="flex flex-col gap-4 border-b border-zinc-200 pb-6 sm:flex-row sm:items-end sm:justify-between">
@@ -52,9 +69,13 @@ export function ProductReviews({ reviews }: ProductReviewsProps) {
 
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
         {reviews.map((review) => (
-          <article
+          <motion.article
             key={review.name}
             className="rounded-2xl border border-zinc-200 bg-zinc-50 p-5"
+            variants={fadeUp}
+            initial={shouldReduceMotion ? undefined : "hidden"}
+            whileInView={shouldReduceMotion ? undefined : "show"}
+            viewport={{ once: true, amount: 0.3 }}
           >
             <div className="flex items-start justify-between gap-3">
               <div>
@@ -66,7 +87,7 @@ export function ProductReviews({ reviews }: ProductReviewsProps) {
             <p className="mt-4 text-sm leading-relaxed text-zinc-700">
               {review.text}
             </p>
-          </article>
+          </motion.article>
         ))}
       </div>
 

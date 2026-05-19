@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { motion, Variants, useReducedMotion } from "framer-motion";
 
 export type RelatedItem = {
   name: string;
@@ -15,6 +16,21 @@ type ProductRelatedProps = {
 };
 
 export function ProductRelated({ related }: ProductRelatedProps) {
+  const shouldReduceMotion = useReducedMotion();
+
+  const fadeUp: Variants = {
+    hidden: { opacity: 0, y: 8 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } },
+  };
+
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.06, delayChildren: 0.15 },
+    },
+  };
+
   return (
     <div className="mt-8 rounded-[28px] border border-zinc-200 bg-white p-6 shadow-[0_18px_60px_rgba(47,39,24,0.08)] sm:p-8">
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">
@@ -25,25 +41,32 @@ export function ProductRelated({ related }: ProductRelatedProps) {
       </h3>
       <div className="mt-6 grid gap-4 md:grid-cols-3">
         {related.map((item) => (
-          <Link
+          <motion.div
             key={`${item.name}-${item.href}`}
-            href={item.href}
-            className="group overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-50 transition hover:-translate-y-1 hover:border-zinc-300 hover:bg-white"
+            variants={fadeUp}
+            initial={shouldReduceMotion ? undefined : "hidden"}
+            whileInView={shouldReduceMotion ? undefined : "show"}
+            viewport={{ once: true, amount: 0.3 }}
           >
-            <div className="relative aspect-[4/3] overflow-hidden bg-zinc-100">
-              <Image
-                src={item.image}
-                alt={item.name}
-                fill
-                className="object-cover transition duration-500 group-hover:scale-[1.04]"
-                sizes="(max-width: 768px) 100vw, 33vw"
-              />
-            </div>
-            <div className="p-4">
-              <p className="font-semibold text-zinc-950">{item.name}</p>
-              <p className="mt-1 text-sm text-zinc-500">{item.price}</p>
-            </div>
-          </Link>
+            <Link
+              href={item.href}
+              className="group overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-50 transition hover:-translate-y-1 hover:border-zinc-300 hover:bg-white"
+            >
+              <div className="relative aspect-[4/3] overflow-hidden bg-zinc-100">
+                <Image
+                  src={item.image}
+                  alt={item.name}
+                  fill
+                  className="object-cover transition duration-500 group-hover:scale-[1.04]"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
+              </div>
+              <div className="p-4">
+                <p className="font-semibold text-zinc-950">{item.name}</p>
+                <p className="mt-1 text-sm text-zinc-500">{item.price}</p>
+              </div>
+            </Link>
+          </motion.div>
         ))}
       </div>
     </div>

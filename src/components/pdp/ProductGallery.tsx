@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Play } from "lucide-react";
+import { motion, Variants, useReducedMotion } from "framer-motion";
 
 export type GalleryTile =
   | {
@@ -30,6 +31,13 @@ export function ProductGallery({
   productName,
   gallery,
 }: ProductGalleryProps) {
+  const shouldReduceMotion = useReducedMotion();
+
+  const fadeUp: Variants = {
+    hidden: { opacity: 0, y: 8 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } },
+  };
+
   return (
     <div className="space-y-5">
       <div className="overflow-hidden rounded-[28px] border border-zinc-200 bg-white shadow-[0_18px_60px_rgba(47,39,24,0.08)]">
@@ -47,9 +55,15 @@ export function ProductGallery({
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         {gallery.map((tile, index) => (
-          <div
+          <motion.div
             key={`${tile.label}-${index}`}
             className="group relative overflow-hidden rounded-[22px] border border-zinc-200 bg-white shadow-[0_16px_40px_rgba(47,39,24,0.06)]"
+            variants={fadeUp}
+            initial={shouldReduceMotion ? undefined : "hidden"}
+            whileInView={shouldReduceMotion ? undefined : "show"}
+            viewport={{ once: true, amount: 0.3 }}
+            whileHover={shouldReduceMotion ? undefined : { scale: 1.02 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
           >
             {tile.kind === "image" ? (
               <div className="relative aspect-[4/5]">
@@ -89,7 +103,7 @@ export function ProductGallery({
                 {tile.hint}
               </p>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>

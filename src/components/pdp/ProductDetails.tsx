@@ -1,5 +1,7 @@
 "use client";
 
+import { motion, Variants, useReducedMotion } from "framer-motion";
+
 type ProductDetailsProps = {
   name: string;
   weight: string;
@@ -17,8 +19,21 @@ export function ProductDetails({
   highlight,
   heroNote,
 }: ProductDetailsProps) {
+  const shouldReduceMotion = useReducedMotion();
+
+  const fadeUp: Variants = {
+    hidden: { opacity: 0, y: 8 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } },
+  };
+
   return (
-    <div className="rounded-[28px] border border-zinc-200 bg-white p-6 shadow-[0_18px_60px_rgba(47,39,24,0.08)] sm:p-8 lg:sticky lg:top-6">
+    <motion.div
+      className="rounded-[28px] border border-zinc-200 bg-white p-6 shadow-[0_18px_60px_rgba(47,39,24,0.08)] sm:p-8 lg:sticky lg:top-6"
+      variants={fadeUp}
+      initial={shouldReduceMotion ? undefined : "hidden"}
+      whileInView={shouldReduceMotion ? undefined : "show"}
+      viewport={{ once: true, amount: 0.3 }}
+    >
       <p className="font-outfit text-xs font-semibold uppercase tracking-[0.18em] text-amber-700">
         Product Details
       </p>
@@ -44,6 +59,6 @@ export function ProductDetails({
         </p>
         <span className="pb-1 font-outfit text-sm text-zinc-500">/ box</span>
       </div>
-    </div>
+    </motion.div>
   );
 }
