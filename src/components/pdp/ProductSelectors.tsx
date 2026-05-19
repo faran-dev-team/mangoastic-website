@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { Check } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 
 const ripenessOptions = [
   "Ready to eat in 1-2 days",
@@ -34,6 +35,8 @@ export function ProductSelectors({
   onAddonsChange,
   productPrice,
 }: ProductSelectorsProps) {
+  const shouldReduceMotion = useReducedMotion();
+
   const totalPrice = useMemo(() => {
     const base = Number(productPrice.replace(/[^0-9]/g, ""));
     const addonTotal =
@@ -53,7 +56,7 @@ export function ProductSelectors({
           </p>
           <div className="mt-3 grid gap-3">
             {ripenessOptions.map((option) => (
-              <button
+              <motion.button
                 key={option}
                 type="button"
                 onClick={() => onRipenessChange(option)}
@@ -62,9 +65,12 @@ export function ProductSelectors({
                     ? "border-amber-500 bg-amber-50 text-zinc-950"
                     : "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300 hover:bg-zinc-50"
                 }`}
+                whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
+                whileHover={shouldReduceMotion ? undefined : { scale: 1.01 }}
+                transition={{ duration: 0.12, ease: "easeOut" }}
               >
                 {option}
-              </button>
+              </motion.button>
             ))}
           </div>
         </div>
@@ -102,23 +108,25 @@ export function ProductSelectors({
               Quantity
             </p>
             <div className="mt-3 flex items-center gap-2 rounded-2xl border border-zinc-200 bg-white p-2">
-              <button
+              <motion.button
                 type="button"
                 onClick={() => onQuantityChange(Math.max(1, quantity - 1))}
                 className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-100 text-lg text-zinc-700 transition hover:bg-zinc-200"
+                whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
               >
                 −
-              </button>
+              </motion.button>
               <div className="flex-1 text-center font-outfit text-lg font-semibold text-zinc-950">
                 {quantity}
               </div>
-              <button
+              <motion.button
                 type="button"
                 onClick={() => onQuantityChange(Math.min(5, quantity + 1))}
                 className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-100 text-lg text-zinc-700 transition hover:bg-zinc-200"
+                whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
               >
                 +
-              </button>
+              </motion.button>
             </div>
           </div>
         </div>
