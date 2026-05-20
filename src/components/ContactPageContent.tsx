@@ -152,8 +152,8 @@ function ContactCard({
 
 export default function ContactPageContent() {
   return (
-    <div className="bg-black text-white">
-      <section className="relative overflow-hidden  px-4 py-14 sm:px-6 sm:py-16 md:px-8 md:py-20">
+    <div className="overflow-x-hidden bg-black text-white">
+      <section className="relative overflow-hidden px-4 py-14 sm:px-6 sm:py-16 md:px-8 md:py-20">
         <div className="pointer-events-none absolute left-1/2 top-0 h-[280px] w-[min(100%,520px)] -translate-x-1/2 rounded-full bg-mango/6 blur-3xl" />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
@@ -186,8 +186,8 @@ export default function ContactPageContent() {
         </motion.div>
       </section>
 
-      <section className="relative px-4 pb-20 sm:px-6 sm:pb-24 md:px-8 md:pb-28">
-        <div className="pointer-events-none absolute right-[-6%] top-[8%] h-[240px] w-[240px] rounded-full bg-orange-500/8 blur-3xl" />
+      <section className="relative overflow-hidden px-4 pb-20 sm:px-6 sm:pb-24 md:px-8 md:pb-28">
+        <div className="pointer-events-none absolute right-0 top-[8%] h-[240px] w-[240px] translate-x-1/3 rounded-full bg-orange-500/8 blur-3xl" />
 
         <motion.div
           variants={containerVariants}
@@ -198,7 +198,7 @@ export default function ContactPageContent() {
         >
           <motion.div
             variants={containerVariants}
-            className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2"
+            className="grid min-w-0 grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 [&>*]:min-w-0"
           >
             <ContactCard
               icon={MessageCircle}
@@ -253,7 +253,7 @@ export default function ContactPageContent() {
               title="Office address"
               className="md:col-span-2"
             >
-              <span className="font-normal text-zinc-300 sm:text-base">
+              <span className="break-words font-normal text-zinc-300 sm:text-base">
                 {OFFICE_ADDRESS_PLACEHOLDER}
               </span>
             </ContactCard>
@@ -270,11 +270,11 @@ export default function ContactPageContent() {
             <div className="relative z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-zinc-700/80 bg-zinc-900/80 text-zinc-300 transition-colors duration-300 group-hover:border-zinc-500 group-hover:bg-zinc-800/90">
               <MapPin className="h-5 w-5" strokeWidth={2} aria-hidden />
             </div>
-            <div className="relative z-10">
+            <div className="relative z-10 min-w-0 flex-1">
               <p className="font-outfit text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-500 sm:text-xs">
                 Orchard
               </p>
-              <p className="mt-2 font-outfit text-base leading-relaxed text-zinc-300 sm:text-[1.0625rem]">
+              <p className="mt-2 break-words font-outfit text-base leading-relaxed text-zinc-300 sm:text-[1.0625rem]">
                 Visits by invitation only, for{" "}
                 <span className="font-semibold text-white">
                   Mangoistic Platinum
