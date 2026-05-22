@@ -56,25 +56,90 @@
   background: rgb(24 24 27);
 }
 
-/* Top padding clears top-right arrows + space under them; bottom = card breathing room */
 .reels-wall-slider .slick-list {
   margin: 0 -0.25rem;
-  padding: 4.25rem 0 1.5rem;
 }
 
-@media (min-width: 1024px) {
-  .reels-wall-slider .slick-list {
-    padding: 4.25rem 0 1.75rem;
-  }
+.reels-arrows-wrap--tablet.reels-wall-slider .slick-list,
+.reels-arrows-wrap--desktop.reels-wall-slider .slick-list {
+  padding: 4.25rem 0 1.75rem;
 }
 
-.reels-wall-slider .slick-track {
-  display: flex;
-  align-items: stretch;
+.reels-arrows-wrap--mobile.reels-wall-slider .slick-list {
+  padding: 0.75rem 0 2.25rem;
+  overflow: hidden;
 }
 
 .reels-wall-slider .slick-slide > div {
   height: 100%;
+}
+
+/* Mobile slider: centered reel, prev/next on left & right */
+.reels-arrows-wrap--mobile.reels-wall-slider .slick-slide {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+}
+
+.reels-arrows-wrap--mobile.reels-wall-slider .slick-slide > div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.reels-arrows-wrap--mobile .slick-prev,
+.reels-arrows-wrap--mobile .slick-next {
+  top: 50% !important;
+  bottom: auto !important;
+  margin-bottom: 0 !important;
+  transform: translateY(-50%) !important;
+  -webkit-transform: translateY(-50%) !important;
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+}
+
+.reels-arrows-wrap--mobile .slick-prev {
+  left: -10px !important;
+  right: auto !important;
+}
+
+.reels-arrows-wrap--mobile .slick-next {
+  right: -10px !important;
+  left: auto !important;
+}
+
+/* Tablet + desktop: arrows top-right above the grid */
+.reels-arrows-wrap--tablet .slick-prev,
+.reels-arrows-wrap--tablet .slick-next,
+.reels-arrows-wrap--desktop .slick-prev,
+.reels-arrows-wrap--desktop .slick-next {
+  top: 0.75rem !important;
+  bottom: auto !important;
+  transform: none !important;
+  -webkit-transform: none !important;
+}
+
+.reels-arrows-wrap--tablet .slick-next,
+.reels-arrows-wrap--desktop .slick-next {
+  right: 1rem !important;
+  left: auto !important;
+}
+
+.reels-arrows-wrap--tablet .slick-prev,
+.reels-arrows-wrap--desktop .slick-prev {
+  right: calc(1rem + 2.75rem + 0.5rem) !important;
+  left: auto !important;
+}
+
+.reels-arrows-wrap--tablet.reels-wall-slider .slick-track,
+.reels-arrows-wrap--desktop.reels-wall-slider .slick-track {
+  display: flex;
+  align-items: stretch;
+}
+
+.reels-arrows-wrap--tablet.reels-wall-slider .slick-slide {
+  padding: 0 0.35rem;
 }
 
 .reels-wall-slider .slick-dots {
@@ -124,31 +189,6 @@
     color 0.2s,
     background 0.2s,
     box-shadow 0.2s;
-  top: 0.75rem !important;
-  bottom: auto !important;
-  margin-bottom: 0.75rem;
-  transform: none !important;
-  -webkit-transform: none !important;
-}
-
-.reels-arrows-wrap .slick-next {
-  right: 0.75rem !important;
-  left: auto !important;
-}
-
-.reels-arrows-wrap .slick-prev {
-  right: calc(0.75rem + 2.75rem + 0.5rem) !important;
-  left: auto !important;
-}
-
-@media (min-width: 1024px) {
-  .reels-arrows-wrap .slick-next {
-    right: 1rem !important;
-  }
-
-  .reels-arrows-wrap .slick-prev {
-    right: calc(1rem + 2.75rem + 0.5rem) !important;
-  }
 }
 
 .reels-arrows-wrap .slick-prev:hover,

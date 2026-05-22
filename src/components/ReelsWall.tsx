@@ -5,7 +5,7 @@ import Image from "next/image";
 
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 import type { CustomArrowProps, Settings } from "react-slick";
 
@@ -82,11 +82,14 @@ const DEMO_REELS = [
   },
 ] as const;
 
+const arrowBtnClass =
+  "reels-slick-arrow z-30 !flex !h-11 !w-11 !items-center !justify-center !rounded-full !border !border-white/10 !bg-white/[0.06] !text-white !backdrop-blur-xl transition-all duration-300 hover:!border-mango/40 hover:!bg-mango/10 hover:scale-105 sm:!h-12 sm:!w-12";
+
 function PrevArrow({ onClick, className, style }: CustomArrowProps) {
   return (
     <button
       type="button"
-      className={`${className} !left-[-14px] z-30 !flex !h-12 !w-12 !items-center !justify-center !rounded-full !border !border-white/10 !bg-white/[0.06] !text-white !backdrop-blur-xl transition-all duration-300 hover:!border-mango/40 hover:!bg-mango/10 hover:scale-105`}
+      className={[className, arrowBtnClass].filter(Boolean).join(" ")}
       style={style}
       onClick={onClick}
       aria-label="Previous reels"
@@ -100,7 +103,7 @@ function NextArrow({ onClick, className, style }: CustomArrowProps) {
   return (
     <button
       type="button"
-      className={`${className} !right-[-14px] z-30 !flex !h-12 !w-12 !items-center !justify-center !rounded-full !border !border-white/10 !bg-white/[0.06] !text-white !backdrop-blur-xl transition-all duration-300 hover:!border-mango/40 hover:!bg-mango/10 hover:scale-105`}
+      className={[className, arrowBtnClass].filter(Boolean).join(" ")}
       style={style}
       onClick={onClick}
       aria-label="Next reels"
@@ -110,7 +113,35 @@ function NextArrow({ onClick, className, style }: CustomArrowProps) {
   );
 }
 
-const sliderSettings: Settings = {
+const mobileSliderSettings: Settings = {
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  swipeToSlide: true,
+  touchThreshold: 10,
+  dots: false,
+  arrows: true,
+  centerMode: false,
+  variableWidth: false,
+  prevArrow: <PrevArrow />,
+  nextArrow: <NextArrow />,
+};
+
+const tabletSliderSettings: Settings = {
+  infinite: true,
+  speed: 550,
+  slidesToShow: 3,
+  slidesToScroll: 1,
+  swipeToSlide: true,
+  touchThreshold: 8,
+  dots: false,
+  arrows: true,
+  prevArrow: <PrevArrow />,
+  nextArrow: <NextArrow />,
+};
+
+const desktopSliderSettings: Settings = {
   infinite: true,
   speed: 600,
   slidesToShow: 4,
@@ -121,17 +152,55 @@ const sliderSettings: Settings = {
   arrows: true,
   prevArrow: <PrevArrow />,
   nextArrow: <NextArrow />,
-  responsive: [
-    {
-      breakpoint: 1023,
-      settings: {
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        centerMode: false,
-      },
-    },
-  ],
 };
+
+type ReelsSliderMode = "mobile" | "tablet" | "desktop";
+
+const REELS_SLIDER_SETTINGS: Record<ReelsSliderMode, Settings> = {
+  mobile: mobileSliderSettings,
+  tablet: tabletSliderSettings,
+  desktop: desktopSliderSettings,
+};
+
+const REELS_WRAPPER_CLASS: Record<ReelsSliderMode, string> = {
+  mobile: "reels-arrows-wrap--mobile max-w-[min(100%,22rem)]",
+  tablet: "reels-arrows-wrap--tablet max-w-6xl px-2 md:px-4",
+  desktop: "reels-arrows-wrap--desktop max-w-6xl lg:px-0",
+};
+
+function getReelsSliderMode(): ReelsSliderMode {
+  if (window.matchMedia("(max-width: 767px)").matches) return "mobile";
+  if (window.matchMedia("(max-width: 1023px)").matches) return "tablet";
+  return "desktop";
+}
+
+function subscribeReelsLayout(onStoreChange: () => void) {
+  const mobileMq = window.matchMedia("(max-width: 767px)");
+  const tabletMq = window.matchMedia("(min-width: 768px) and (max-width: 1023px)");
+  const onChange = () => onStoreChange();
+
+  mobileMq.addEventListener("change", onChange);
+  tabletMq.addEventListener("change", onChange);
+  window.addEventListener("resize", onChange);
+
+  return () => {
+    mobileMq.removeEventListener("change", onChange);
+    tabletMq.removeEventListener("change", onChange);
+    window.removeEventListener("resize", onChange);
+  };
+}
+
+function getReelsSliderModeServerSnapshot(): ReelsSliderMode {
+  return "desktop";
+}
+
+function useReelsSliderMode(): ReelsSliderMode {
+  return useSyncExternalStore(
+    subscribeReelsLayout,
+    getReelsSliderMode,
+    getReelsSliderModeServerSnapshot,
+  );
+}
 
 function ReelSlideCard({
   label,
@@ -188,7 +257,7 @@ function ReelSlideCard({
   return (
     <motion.div
       whileHover={{
-        y: -10,
+        y: -5,
         scale: 1.02,
       }}
       transition={{
@@ -196,10 +265,10 @@ function ReelSlideCard({
         stiffness: 220,
         damping: 18,
       }}
-      className="px-2 pb-2"
+      className="flex w-full justify-center pb-2 md:px-1 lg:px-2"
     >
       <div
-        className={`group relative mx-auto aspect-[9/13] w-full max-w-[min(88vw,300px)] overflow-hidden rounded-[32px] border bg-zinc-900/80 shadow-[0_28px_70px_-18px_rgba(0,0,0,0.78)] backdrop-blur-xl transition-all duration-500 sm:max-w-[300px] lg:max-w-[320px] ${
+        className={`group relative mx-auto aspect-[9/13] w-full max-w-[min(calc(100vw-5.5rem),280px)] overflow-hidden rounded-[32px] border bg-zinc-900/80 shadow-[0_28px_70px_-18px_rgba(0,0,0,0.78)] backdrop-blur-xl transition-all duration-500 sm:max-w-[300px] md:max-w-none md:mx-0 lg:max-w-[320px] ${
           isPlaying
             ? "scale-[1.02] border-mango/40 ring-1 ring-mango/20"
             : "border-white/10 hover:border-mango/30"
@@ -254,7 +323,7 @@ function ReelSlideCard({
               alt={`${label} — video thumbnail`}
               fill
               className="object-cover"
-              sizes="(max-width: 1023px) 90vw, (max-width: 1024px) 45vw, 320px"
+              sizes="(max-width: 767px) 90vw, (max-width: 1023px) 33vw, 25vw"
             />
           </motion.div>
         )}
@@ -333,6 +402,8 @@ function ReelSlideCard({
 
 export default function ReelsWall() {
   const [playingId, setPlayingId] = useState<number | null>(null);
+  const sliderMode = useReelsSliderMode();
+  const sliderSettings = REELS_SLIDER_SETTINGS[sliderMode];
 
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
@@ -410,9 +481,15 @@ export default function ReelsWall() {
           We&apos;re sharing some.
         </h2>
 
-        {/* Slider */}
-        <div className="reels-wall-slider reels-arrows-wrap relative mx-auto mt-14 max-w-6xl px-4 pt-2 sm:px-8 lg:px-0">
-          <Slider {...sliderSettings} beforeChange={() => setPlayingId(null)}>
+        {/* Slider — 1 mobile, 3 tablet (iPad), 4 desktop */}
+        <div
+          className={`reels-wall-slider reels-arrows-wrap relative mx-auto mt-10 w-full pt-2 sm:mt-14 ${REELS_WRAPPER_CLASS[sliderMode]}`}
+        >
+          <Slider
+            key={`reels-${sliderMode}`}
+            {...sliderSettings}
+            beforeChange={() => setPlayingId(null)}
+          >
             {DEMO_REELS.map((reel) => (
               <div key={reel.id}>
                 <ReelSlideCard
