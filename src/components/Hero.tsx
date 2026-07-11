@@ -8,6 +8,7 @@ import { motion, Variants } from "framer-motion";
 import { useEffect, useRef } from "react";
 
 import gsap from "gsap";
+import { WHATSAPP_HREF } from "@/data/contact";
 
 export default function Hero() {
   const heroRef = useRef<HTMLDivElement | null>(null);
@@ -193,7 +194,7 @@ Untouched.`}
 
             {/* Secondary CTA */}
             <a
-              href="https://wa.me/923214567890"
+              href={WHATSAPP_HREF}
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex items-center justify-center gap-2.5 rounded-full border border-white/20 bg-white/5 px-8 py-4 font-outfit text-sm font-semibold text-white backdrop-blur-xl transition-all duration-500 hover:border-mango/40 hover:bg-white/10 hover:text-mango hover:shadow-[0_0_35px_-12px_rgba(255,163,10,0.45)]"

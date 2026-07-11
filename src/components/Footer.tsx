@@ -5,10 +5,13 @@ import { FormEvent, useState } from "react";
 import { motion, Variants } from "framer-motion";
 
 const shopLinks = [
-  { label: "Classic 7kg", href: "/products/mangoastic-classic-7kg" },
-  { label: "Family 10kg", href: "/products/mangoastic-family-10kg" },
-  { label: "Mixed Discovery", href: "/products/mixed-premium-discovery-7kg" },
-  { label: "The Gift Edit", href: "/products/gift-edit-5kg", highlight: true },
+  { label: "Saroli", href: "/products/saroli" },
+  { label: "Desheri", href: "/products/desheri" },
+  { label: "White Chaunsa", href: "/products/white-chausa", highlight: true },
+  { label: "Black Chaunsa", href: "/products/black-chausa" },
+  { label: "Anwar Ratol", href: "/products/anwar-ratol" },
+  { label: "Sindhri", href: "/products/sindhri" },
+  { label: "Langra", href: "/products/langra" },
   { label: "Season Pass", href: "/season-pass" },
 ] as const;
 

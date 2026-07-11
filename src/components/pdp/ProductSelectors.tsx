@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { Check } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
+import { type BoxWeight, type ProductPricing, formatPKR } from "@/data/products";
 
 const ripenessOptions = [
   "Ready to eat in 1-2 days",
@@ -10,13 +11,19 @@ const ripenessOptions = [
   "Mixed (for sharing across the week)",
 ] as const;
 
+const weightOptions: { id: BoxWeight; label: string }[] = [
+  { id: "5kg", label: "5 KG" },
+  { id: "8kg", label: "8 KG" },
+];
+
 const addonOptions = [
   { id: "mango-honey", label: "Add mango honey 250g (+850 PKR)" },
-  { id: "aamras", label: "Add aamras pouch 500g (+650 PKR)" },
-  { id: "gift-note", label: "Add a handwritten gift note (free)" },
 ] as const;
 
 type ProductSelectorsProps = {
+  boxWeight: BoxWeight;
+  onBoxWeightChange: (weight: BoxWeight) => void;
+  pricing: ProductPricing;
   ripeness: (typeof ripenessOptions)[number];
   onRipenessChange: (ripeness: (typeof ripenessOptions)[number]) => void;
   quantity: number;
@@ -27,6 +34,9 @@ type ProductSelectorsProps = {
 };
 
 export function ProductSelectors({
+  boxWeight,
+  onBoxWeightChange,
+  pricing,
   ripeness,
   onRipenessChange,
   quantity,
@@ -39,10 +49,7 @@ export function ProductSelectors({
 
   const totalPrice = useMemo(() => {
     const base = Number(productPrice.replace(/[^0-9]/g, ""));
-    const addonTotal =
-      (addons["mango-honey"] ? 850 : 0) +
-      (addons.aamras ? 650 : 0) +
-      (addons["gift-note"] ? 0 : 0);
+    const addonTotal = addons["mango-honey"] ? 850 : 0;
 
     return (base + addonTotal) * quantity;
   }, [addons, quantity, productPrice]);
@@ -50,6 +57,36 @@ export function ProductSelectors({
   return (
     <>
       <div className="mt-7 space-y-5 border-t border-zinc-200 pt-6">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">
+            Box size
+          </p>
+          <div className="mt-3 grid grid-cols-2 gap-3">
+            {weightOptions.map((option) => (
+              <motion.button
+                key={option.id}
+                type="button"
+                onClick={() => onBoxWeightChange(option.id)}
+                className={`rounded-2xl border px-4 py-3 text-left font-outfit transition ${
+                  boxWeight === option.id
+                    ? "border-amber-500 bg-amber-50 text-zinc-950"
+                    : "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300 hover:bg-zinc-50"
+                }`}
+                whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
+                whileHover={shouldReduceMotion ? undefined : { scale: 1.01 }}
+                transition={{ duration: 0.12, ease: "easeOut" }}
+              >
+                <span className="block text-sm font-semibold">
+                  {option.label}
+                </span>
+                <span className="mt-0.5 block text-xs text-zinc-500">
+                  {formatPKR(pricing[option.id])}
+                </span>
+              </motion.button>
+            ))}
+          </div>
+        </div>
+
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">
             Ripeness preference
