@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { FormEvent, useCallback, useState } from "react";
 import { motion, Variants } from "framer-motion";
+import { ComingSoonToast } from "@/components/ComingSoonToast";
 
 const shopLinks = [
   { label: "Saroli", href: "/products/saroli" },
@@ -51,15 +52,20 @@ const item: Variants = {
 
 export default function Footer() {
   const [email, setEmail] = useState("");
-  const [sent, setSent] = useState(false);
+  const [showComingSoon, setShowComingSoon] = useState(false);
+
+  const dismissComingSoon = useCallback(() => {
+    setShowComingSoon(false);
+  }, []);
 
   function onNotify(e: FormEvent) {
     e.preventDefault();
-    if (!email.trim()) return;
-    setSent(true);
+    setShowComingSoon(true);
   }
 
   return (
+    <>
+      <ComingSoonToast open={showComingSoon} onClose={dismissComingSoon} />
     <motion.footer
       initial="hidden"
       whileInView="show"
@@ -109,7 +115,7 @@ export default function Footer() {
                 type="submit"
                 className="min-h-[48px] shrink-0 rounded-full bg-[#FDB022] px-6 font-outfit text-xs font-bold uppercase tracking-[0.12em] text-black shadow-[0_0_24px_-4px_rgba(253,176,34,0.45)] transition hover:bg-[#ffc53d] sm:px-8"
               >
-                {sent ? "You're on the list" : "Notify me"}
+                Notify me
               </motion.button>
             </form>
           </motion.div>
@@ -183,5 +189,6 @@ export default function Footer() {
         </div>
       </div>
     </motion.footer>
+    </>
   );
 }

@@ -1,9 +1,5 @@
-import SeasonPassHero from "@/components/SeasonPassHero";
-import SeasonPassHowItWorks from "@/components/SeasonPassHowItWorks";
-import SeasonPassFaqMini from "@/components/SeasonPassFaqMini";
-import SeasonPassWhyBestDeal from "@/components/SeasonPassWhyBestDeal";
+import SeasonPassPageContent from "@/components/SeasonPassPageContent";
 import type { Metadata } from "next";
-import FooterCta from "@/components/FooterCta";
 
 export const metadata: Metadata = {
   title: "Season Pass — Mangoastic",
@@ -12,14 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function SeasonPassPage() {
-  return (
-    <div className="flex flex-1 flex-col bg-black">
-      <SeasonPassHero />
-      <SeasonPassHowItWorks />
-      <SeasonPassWhyBestDeal />
-      <SeasonPassFaqMini />
-      <FooterCta />
-
-    </div>
-  );
+  return <SeasonPassPageContent />;
 }

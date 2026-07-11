@@ -9,7 +9,13 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function FooterCta() {
+export default function FooterCta({
+  reservePassComingSoon = false,
+  onReservePass,
+}: {
+  reservePassComingSoon?: boolean;
+  onReservePass?: () => void;
+}) {
   const sectionRef = useRef<HTMLElement | null>(null);
   const prefersReducedMotion = useReducedMotion();
 
@@ -117,12 +123,22 @@ export default function FooterCta() {
             }
             whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
           >
-            <Link
-              href="/season-pass"
-              className="inline-flex min-w-[200px] items-center justify-center rounded-full border border-white/35 bg-transparent px-8 py-3.5 font-outfit text-sm font-semibold text-white transition hover:border-white/60 hover:bg-white/5"
-            >
-              Reserve Your Season Pass
-            </Link>
+            {reservePassComingSoon ? (
+              <button
+                type="button"
+                onClick={onReservePass}
+                className="inline-flex min-w-[200px] items-center justify-center rounded-full border border-white/35 bg-transparent px-8 py-3.5 font-outfit text-sm font-semibold text-white transition hover:border-white/60 hover:bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50"
+              >
+                Reserve Your Season Pass
+              </button>
+            ) : (
+              <Link
+                href="/season-pass"
+                className="inline-flex min-w-[200px] items-center justify-center rounded-full border border-white/35 bg-transparent px-8 py-3.5 font-outfit text-sm font-semibold text-white transition hover:border-white/60 hover:bg-white/5"
+              >
+                Reserve Your Season Pass
+              </Link>
+            )}
           </motion.div>
         </div>
       </div>
