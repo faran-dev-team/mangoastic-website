@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, Variants } from "framer-motion";
+import { ORCHARD_GALLERY_IMAGES } from "@/data/orchard-gallery";
 
 const fadeUp = {
   hidden: {
@@ -172,94 +173,39 @@ export default function OrchardPage() {
             </h2>
 
             <p className="mt-4 font-outfit text-base leading-relaxed text-white/72 sm:text-lg">
-              Editorial shots from the orchard, packing line, and finished
-              boxes.
+              Every variety from our orchard this season — Chaunsa, Sindhri,
+              Anwar Ratol, Desheri, Langra, and more.
             </p>
           </motion.div>
 
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.12 }}
+            viewport={{ once: true, amount: 0.08 }}
             variants={staggerContainer}
-            className="mt-10 grid gap-4 md:grid-cols-12 md:auto-rows-[11rem] lg:auto-rows-[13rem]"
+            className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
           >
-            {[
-              {
-                src: "/images/ochard.jpg",
-                alt: "Mangoastic orchard at sunrise",
-                caption: "Sunrise over the trees",
-                className: "md:col-span-8 md:row-span-2",
-              },
-              {
-                src: "/images/hero-shop.jpg",
-                alt: "Shop hero orchard scene",
-                caption: "Rows that turn into boxes",
-                className: "md:col-span-4 md:row-span-2",
-              },
-              {
-                src: "/images/hero.png",
-                alt: "Hero mango portrait",
-                caption: "The fruit we build around",
-                className: "md:col-span-4",
-              },
-              {
-                src: "/images/mango1.jpg",
-                alt: "Single mango product shot",
-                caption: "Held like it matters",
-                className: "md:col-span-4",
-              },
-              {
-                src: "/images/mango2.jpg",
-                alt: "Second mango product shot",
-                caption: "Picked, graded, packed",
-                className: "md:col-span-4",
-              },
-              {
-                src: "/images/mango3.jpg",
-                alt: "Third mango product shot",
-                caption: "The season in one frame",
-                className: "md:col-span-4",
-              },
-              {
-                src: "/images/mango4.jpg",
-                alt: "Fourth mango product shot",
-                caption: "Gift-ready by default",
-                className: "md:col-span-4",
-              },
-              {
-                src: "/images/mango5.jpg",
-                alt: "Fifth mango product shot",
-                caption: "The last check before dispatch",
-                className: "md:col-span-4",
-              },
-            ].map((image, index) => (
+            {ORCHARD_GALLERY_IMAGES.map((image) => (
               <motion.figure
                 key={image.src}
                 variants={fadeUp}
                 whileHover={{ y: -8 }}
                 transition={{ duration: 0.45 }}
-                className={`group overflow-hidden rounded-[1.6rem] border border-white/10 bg-white/[0.03] ${image.className}`}
+                className="group overflow-hidden rounded-[1.25rem] border border-white/10 bg-white/[0.03] sm:rounded-[1.6rem]"
               >
-                <div
-                  className={`relative w-full overflow-hidden bg-zinc-900 ${
-                    index < 2
-                      ? "h-full min-h-[16rem]"
-                      : "aspect-[4/3] md:aspect-auto md:h-full"
-                  }`}
-                >
+                <div className="relative aspect-[4/3] w-full overflow-hidden bg-zinc-900">
                   <Image
                     src={image.src}
                     alt={image.alt}
                     fill
                     className="object-cover object-center transition-transform duration-1000 group-hover:scale-[1.08]"
-                    sizes="(max-width: 768px) 100vw, 33vw"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
                   />
 
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent opacity-80 transition-opacity duration-500 group-hover:opacity-100" />
 
-                  <div className="absolute inset-x-0 bottom-0 px-4 py-4">
-                    <figcaption className="translate-y-3 font-outfit text-xs italic text-white/82 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 sm:text-sm">
+                  <div className="absolute inset-x-0 bottom-0 px-3 py-3 sm:px-4 sm:py-4">
+                    <figcaption className="translate-y-3 font-outfit text-[10px] italic text-white/82 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 sm:text-xs">
                       {image.caption}
                     </figcaption>
                   </div>
@@ -327,7 +273,7 @@ export default function OrchardPage() {
             duration: 1,
             ease: [0.22, 1, 0.36, 1],
           }}
-          className="mx-auto flex max-w-5xl flex-col items-start justify-between gap-6 rounded-[2rem] border border-white/10 bg-white/[0.03] px-6 py-8 sm:px-8 sm:py-10 lg:flex-row lg:items-center lg:px-10"
+          className="mx-auto flex max-w-5xl flex-col items-stretch justify-between gap-8 rounded-[2rem] border border-white/10 bg-white/[0.03] px-6 py-8 sm:px-8 sm:py-10 lg:flex-row lg:items-center lg:gap-10 lg:px-10"
         >
           <div className="max-w-2xl">
             <p className="font-outfit text-xs font-semibold uppercase tracking-[0.24em] text-amber-400/90">
@@ -344,8 +290,9 @@ export default function OrchardPage() {
           </div>
 
           <motion.div
+            className="w-full shrink-0 lg:w-auto"
             whileHover={{
-              scale: 1.04,
+              scale: 1.03,
             }}
             whileTap={{
               scale: 0.98,
@@ -353,9 +300,12 @@ export default function OrchardPage() {
           >
             <Link
               href="/shop"
-              className="inline-flex items-center justify-center rounded-full bg-amber-500 px-6 py-3.5 font-outfit text-sm font-semibold uppercase tracking-[0.12em] text-black transition hover:bg-amber-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300"
+              className="group inline-flex w-full items-center justify-center whitespace-nowrap rounded-full bg-amber-500 px-8 py-4 font-outfit text-sm font-semibold uppercase tracking-[0.1em] text-black shadow-[0_18px_60px_-18px_rgba(251,191,36,0.7)] transition hover:bg-amber-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300 lg:w-auto"
             >
-              Order This Season&apos;s Box
+              Shop this season
+              <span className="ml-2 transition-transform duration-300 group-hover:translate-x-0.5">
+                →
+              </span>
             </Link>
           </motion.div>
         </motion.div>

@@ -7,10 +7,11 @@ import {
   Truck,
 } from "lucide-react";
 import Link from "next/link";
+import { whatsappLink } from "@/data/contact";
 
-const WHATSAPP_SUPPORT_HREF =
-  "https://wa.me/923214567890?text=" +
-  encodeURIComponent("Hi Mangoastic — I need help with delivery or returns.");
+const WHATSAPP_SUPPORT_HREF = whatsappLink(
+  "Hi Mangoastic — I need help with delivery or returns.",
+);
 
 const DELIVERY_ROWS = [
   {

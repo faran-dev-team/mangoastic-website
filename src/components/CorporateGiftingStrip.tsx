@@ -9,11 +9,13 @@ import { motion } from "framer-motion";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 
+import { corporateWhatsappLink } from "@/data/contact";
+
 gsap.registerPlugin(ScrollTrigger);
 
-const CORPORATE_WHATSAPP_HREF =
-  "https://wa.me/923214567890?text=" +
-  encodeURIComponent("Hi Mangoastic — I'd like a quote for corporate gifting.");
+const CORPORATE_WHATSAPP_HREF = corporateWhatsappLink(
+  "Hi Mangoastic — I'd like a quote for corporate gifting.",
+);
 
 export default function CorporateGiftingStrip() {
   const sectionRef = useRef<HTMLElement | null>(null);

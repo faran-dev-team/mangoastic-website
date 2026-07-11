@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion, Variants, useReducedMotion } from "framer-motion";
+import { WHATSAPP_HREF } from "@/data/contact";
 
 type ProductFooterCTAProps = {
   whatsappMessage: string;
@@ -24,14 +25,14 @@ export function ProductFooterCTA({ whatsappMessage }: ProductFooterCTAProps) {
       viewport={{ once: true, amount: 0.3 }}
     >
       <h3 className="font-sirelia text-2xl text-white sm:text-3xl">
-        Not sure which box is for you?
+        Not sure which variety is for you?
       </h3>
       <p className="mx-auto mt-3 max-w-2xl font-outfit text-sm leading-relaxed text-zinc-300">
         Send us a WhatsApp. We&apos;ll help you pick in two minutes.
       </p>
       <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
         <motion.a
-          href={`https://wa.me/923001234567?text=${whatsappMessage}`}
+          href={`${WHATSAPP_HREF}?text=${whatsappMessage}`}
           className="inline-flex items-center justify-center rounded-full bg-amber-400 px-6 py-3 font-outfit text-sm font-semibold text-black transition hover:bg-amber-300"
           whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
           whileHover={shouldReduceMotion ? undefined : { scale: 1.02 }}
