@@ -1,38 +1,30 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useCallback, useMemo } from "react";
-import { ProductGallery, type GalleryTile } from "./pdp/ProductGallery";
+import { useState } from "react";
+import { ProductGallery } from "./pdp/ProductGallery";
 import { ProductDetails } from "./pdp/ProductDetails";
 import { ProductSelectors } from "./pdp/ProductSelectors";
 import { ProductCTAs } from "./pdp/ProductCTAs";
-import { ProductTabsSection, type Tab } from "./pdp/ProductTabsSection";
-import { ProductReviews, type Review } from "./pdp/ProductReviews";
+import { ProductTabsSection } from "./pdp/ProductTabsSection";
+import { ProductReviews } from "./pdp/ProductReviews";
 import { ProductRelated, type RelatedItem } from "./pdp/ProductRelated";
 import { ProductFooterCTA } from "./pdp/ProductFooterCTA";
+import {
+  type BoxWeight,
+  type MangoProduct,
+  getProductPrice,
+} from "@/data/products";
 
-export type ProductPageContent = {
-  breadcrumb: string;
-  name: string;
-  weight: string;
-  price: string;
-  description: string;
-  highlight: string;
-  heroNote: string;
-  image: string;
-  gallery: GalleryTile[];
-  tabs: Tab[];
-  reviews: Review[];
+type Props = {
+  product: MangoProduct;
   related: RelatedItem[];
 };
 
-type Props = {
-  product: ProductPageContent;
-};
-
-export default function ProductPageClient({ product }: Props) {
+export default function ProductPageClient({ product, related }: Props) {
   const [activeTab, setActiveTab] = useState(0);
   const [mobileOpenTab, setMobileOpenTab] = useState<number | null>(0);
+  const [boxWeight, setBoxWeight] = useState<BoxWeight>("5kg");
   const [ripeness, setRipeness] = useState<
     | "Ready to eat in 1-2 days"
     | "Ready in 3-4 days"
@@ -41,12 +33,13 @@ export default function ProductPageClient({ product }: Props) {
   const [quantity, setQuantity] = useState(1);
   const [addons, setAddons] = useState<Record<string, boolean>>({
     "mango-honey": false,
-    aamras: false,
-    "gift-note": true,
   });
 
+  const selectedPrice = getProductPrice(product, boxWeight);
+  const weightLabel = boxWeight === "5kg" ? "5 kg" : "8 kg";
+
   const whatsappMessage = encodeURIComponent(
-    `Hi Mangoastic, I'd like to order ${quantity} x ${product.name} (${product.weight}). Ripeness: ${ripeness}. Add-ons: ${
+    `Hi Mangoastic, I'd like to order ${quantity} x ${product.name} (${weightLabel} box). Price: ${selectedPrice}. Ripeness: ${ripeness}. Add-ons: ${
       Object.entries(addons)
         .filter(([, checked]) => checked)
         .map(([key]) => key)
@@ -62,12 +55,11 @@ export default function ProductPageClient({ product }: Props) {
             Shop
           </Link>
           <span className="mx-2">/</span>
-          <span>Boxes</span>
+          <span>Varieties</span>
           <span className="mx-2">/</span>
           <span className="text-zinc-900">{product.breadcrumb}</span>
         </nav>
 
-        {/* Hero Section: Gallery + Details */}
         <div className="mt-6 grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
           <ProductGallery
             mainImage={product.image}
@@ -75,37 +67,37 @@ export default function ProductPageClient({ product }: Props) {
             gallery={product.gallery}
           />
 
-          {/* Product Details + Selectors in sticky sidebar */}
           <div>
             <ProductDetails
               name={product.name}
-              weight={product.weight}
-              price={product.price}
+              weight={`${weightLabel} box`}
+              price={selectedPrice}
               description={product.description}
               highlight={product.highlight}
               heroNote={product.heroNote}
             />
 
             <ProductSelectors
+              boxWeight={boxWeight}
+              onBoxWeightChange={setBoxWeight}
+              pricing={product.pricing}
               ripeness={ripeness}
               onRipenessChange={setRipeness}
               quantity={quantity}
               onQuantityChange={setQuantity}
               addons={addons}
               onAddonsChange={setAddons}
-              productPrice={product.price}
+              productPrice={selectedPrice}
             />
 
             <ProductCTAs
-              productBreadcrumb={product.breadcrumb}
-              productPrice={product.price}
+              productPrice={selectedPrice}
               quantity={quantity}
               whatsappMessage={whatsappMessage}
             />
           </div>
         </div>
 
-        {/* Sections Below */}
         <ProductTabsSection
           tabs={product.tabs}
           activeTabIndex={activeTab}
@@ -116,7 +108,7 @@ export default function ProductPageClient({ product }: Props) {
 
         <ProductReviews reviews={product.reviews} />
 
-        <ProductRelated related={product.related} />
+        <ProductRelated related={related} />
 
         <ProductFooterCTA whatsappMessage={whatsappMessage} />
       </div>

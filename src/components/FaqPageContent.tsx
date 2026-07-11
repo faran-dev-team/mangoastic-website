@@ -1,6 +1,7 @@
 "use client";
 
 import { FAQ_CATEGORIES, type FaqCategory } from "@/data/faq";
+import { WHATSAPP_HREF } from "@/data/contact";
 import { AnimatePresence, motion, type Variants } from "framer-motion";
 import { ChevronRight, Search, X } from "lucide-react";
 import Link from "next/link";
@@ -316,7 +317,7 @@ export default function FaqPageContent() {
             >
               No matches. Try another keyword or{" "}
               <a
-                href="https://wa.me/923214567890"
+                href={WHATSAPP_HREF}
                 className="font-semibold text-mango hover:underline"
               >
                 WhatsApp us

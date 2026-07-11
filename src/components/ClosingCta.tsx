@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { WHATSAPP_HREF } from "@/data/contact";
 
 export default function ClosingCta() {
   return (
@@ -116,7 +117,7 @@ export default function ClosingCta() {
             }}
           >
             <a
-              href="https://wa.me/923000000000"
+              href={WHATSAPP_HREF}
               className="inline-flex min-w-[220px] items-center justify-center rounded-full border border-white/10 bg-white/[0.03] px-7 py-3.5 font-outfit text-sm font-semibold uppercase tracking-[0.12em] text-zinc-100 transition hover:border-amber-400/50 hover:bg-white/[0.05]"
             >
               WhatsApp Us

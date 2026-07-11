@@ -6,12 +6,11 @@ import { ArrowRight, Download } from "lucide-react";
 import { motion, Variants } from "framer-motion";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { corporateWhatsappLink } from "@/data/contact";
 
-const CORPORATE_WHATSAPP_HREF =
-  "https://wa.me/923214567890?text=" +
-  encodeURIComponent(
-    "Hi Mangoastic — I'd like a quote for corporate gifting (boxes, logo, delivery).",
-  );
+const CORPORATE_WHATSAPP_HREF = corporateWhatsappLink(
+  "Hi Mangoastic — I'd like a quote for corporate gifting (boxes, logo, delivery).",
+);
 
 /** Add your PDF to `public/documents/mangoastic-corporate-catalogue.pdf` */
 const CORPORATE_CATALOGUE_PDF = "/documents/mangoastic-corporate-catalogue.pdf";

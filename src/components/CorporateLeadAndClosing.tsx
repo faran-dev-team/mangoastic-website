@@ -5,6 +5,7 @@ import { ArrowRight, MessageCircle } from "lucide-react";
 import { motion, useReducedMotion, Variants } from "framer-motion";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import { corporateWhatsappLink } from "@/data/contact";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -25,9 +26,9 @@ const fadeUp: Variants = {
   },
 };
 
-const CORPORATE_B2B_WHATSAPP =
-  "https://wa.me/923214567890?text=" +
-  encodeURIComponent("Hi Mangoastic — I'd like to speak with your B2B corporate gifting team.");
+const CORPORATE_B2B_WHATSAPP = corporateWhatsappLink(
+  "Hi Mangoastic — I'd like to speak with your B2B corporate gifting team.",
+);
 
 const QUANTITY_OPTIONS = [
   { value: "25-50", label: "25–50 boxes" },
@@ -170,7 +171,7 @@ export default function CorporateLeadAndClosing() {
     });
 
     window.open(
-      `https://wa.me/923412764104?text=${encodeURIComponent(message)}`,
+      corporateWhatsappLink(message),
       "_blank",
       "noopener,noreferrer",
     );

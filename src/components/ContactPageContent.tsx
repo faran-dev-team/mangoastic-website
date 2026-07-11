@@ -10,15 +10,19 @@ import {
 import { motion, type Variants } from "framer-motion";
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
+import {
+  WHATSAPP_DISPLAY,
+  WHATSAPP_CORPORATE_DISPLAY,
+  WHATSAPP_HREF,
+  corporateWhatsappLink,
+} from "@/data/contact";
 
-/** Swap display numbers before launch; wa.me links use current routing. */
-const WHATSAPP_D2C_DISPLAY = "+92 XXX XXXXXXX";
-const WHATSAPP_D2C_HREF = "https://wa.me/923214567890";
+const WHATSAPP_D2C_DISPLAY = WHATSAPP_DISPLAY;
+const WHATSAPP_D2C_HREF = WHATSAPP_HREF;
 
-const WHATSAPP_CORPORATE_DISPLAY = "+92 XXX XXXXXXX";
-const WHATSAPP_CORPORATE_HREF =
-  "https://wa.me/923214567890?text=" +
-  encodeURIComponent("Hi Mangoastic — I'd like to get in touch.");
+const WHATSAPP_CORPORATE_HREF = corporateWhatsappLink(
+  "Hi Mangoastic — I'd like to get in touch.",
+);
 
 const EMAIL_HELLO = "hello@mangoistic.com";
 const EMAIL_PRESS = "press@mangoistic.com";

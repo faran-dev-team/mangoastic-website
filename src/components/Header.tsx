@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Menu, X, ShoppingCart } from "lucide-react";
+import { WHATSAPP_HREF } from "@/data/contact";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -63,7 +64,7 @@ export default function Header() {
 
           {/* WhatsApp Button (desktop header only) */}
           <a
-            href="https://wa.me/923214567890"
+            href={WHATSAPP_HREF}
             target="_blank"
             rel="noopener noreferrer"
             className="hidden items-center gap-2 rounded border border-white px-4 py-2 font-outfit text-xs font-semibold text-white transition-all hover:bg-white hover:text-black lg:inline-flex"
@@ -106,7 +107,7 @@ export default function Header() {
             ))}
             {/* WhatsApp (mobile + tablet menu) */}
             <a
-              href="https://wa.me/923214567890"
+              href={WHATSAPP_HREF}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-4 flex items-center gap-2 rounded border border-white px-4 py-2 font-outfit text-xs font-semibold text-white transition-all hover:bg-white hover:text-black"

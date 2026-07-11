@@ -2,12 +2,11 @@
 
 import Link from "next/link";
 import { motion, Variants } from "framer-motion";
+import { corporateWhatsappLink } from "@/data/contact";
 
-const CORPORATE_WHATSAPP_HREF =
-  "https://wa.me/923214567890?text=" +
-  encodeURIComponent(
-    "Hi Mangoastic — I'd like a quote for 201+ corporate gift boxes.",
-  );
+const CORPORATE_WHATSAPP_HREF = corporateWhatsappLink(
+  "Hi Mangoastic — I'd like a quote for 201+ corporate gift boxes.",
+);
 
 const TIERS = [
   {
