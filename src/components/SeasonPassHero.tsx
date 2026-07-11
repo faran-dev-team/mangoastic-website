@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { motion, Variants } from "framer-motion";
 import { useEffect, useRef } from "react";
@@ -23,7 +22,11 @@ const fadeUp: Variants = {
   },
 };
 
-export default function SeasonPassHero() {
+export default function SeasonPassHero({
+  onReservePass,
+}: {
+  onReservePass?: () => void;
+}) {
   const heroRef = useRef<HTMLElement | null>(null);
   const imageRef = useRef<HTMLDivElement | null>(null);
 
@@ -78,7 +81,7 @@ export default function SeasonPassHero() {
     >
       <motion.div
         ref={imageRef}
-        className="absolute inset-0 scale-100 will-change-transform"
+        className="pointer-events-none absolute inset-0 scale-100 will-change-transform"
       >
         <Image
           src="/images/seasonpass.jpg"
@@ -90,17 +93,17 @@ export default function SeasonPassHero() {
         />
       </motion.div>
 
-      <div className="absolute inset-0 bg-black/40" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/92 via-black/78 to-black/45" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-black/30" />
+      <div className="pointer-events-none absolute inset-0 bg-black/40" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/92 via-black/78 to-black/45" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-black/30" />
 
       <motion.div
-        className="absolute left-[-8%] top-[12%] h-[280px] w-[280px] rounded-full bg-mango/15 blur-3xl"
+        className="pointer-events-none absolute left-[-8%] top-[12%] h-[280px] w-[280px] rounded-full bg-mango/15 blur-3xl"
         animate={{ y: [0, -18, 0], opacity: [0.6, 1, 0.6] }}
         transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      <div className="relative mx-auto flex min-h-[72vh] max-w-6xl items-center px-4 py-20 sm:min-h-[78vh] sm:px-6 sm:py-24 lg:min-h-[82vh] lg:px-8">
+      <div className="relative z-10 mx-auto flex min-h-[72vh] max-w-6xl items-center px-4 py-20 sm:min-h-[78vh] sm:px-6 sm:py-24 lg:min-h-[82vh] lg:px-8">
         <motion.div
           variants={container}
           initial="hidden"
@@ -144,19 +147,20 @@ export default function SeasonPassHero() {
           </motion.div>
 
           <motion.div variants={fadeUp} className="mt-8 sm:mt-10">
-            <Link
-              href="#reserve"
+            <button
+              type="button"
+              onClick={() => onReservePass?.()}
               className="group relative inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-full bg-mango px-8 py-4 font-outfit text-sm font-semibold text-black shadow-[0_0_40px_-10px_rgba(255,163,10,0.55)] transition-all duration-500 hover:scale-[1.03] hover:shadow-[0_0_60px_-8px_rgba(255,163,10,0.8)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mango"
             >
-              <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
-                <span className="relative z-10 flex items-center gap-2.5">
-                  Reserve My Pass
-                  <ArrowRight
-                    className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1.5"
-                    strokeWidth={2.5}
-                  />
-                </span>
-              </Link>
+              <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
+              <span className="relative z-10 flex items-center gap-2.5">
+                Reserve My Pass
+                <ArrowRight
+                  className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1.5"
+                  strokeWidth={2.5}
+                />
+              </span>
+            </button>
           </motion.div>
         </motion.div>
       </div>
@@ -165,7 +169,7 @@ export default function SeasonPassHero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6, duration: 1 }}
-        className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black to-transparent sm:h-40"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black to-transparent sm:h-40"
       />
     </section>
   );
