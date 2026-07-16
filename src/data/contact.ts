@@ -29,15 +29,19 @@ export const WHATSAPP_HREF = `https://wa.me/${WHATSAPP_NUMBER}`;
 export const WHATSAPP_CORPORATE_HREF = `https://wa.me/${WHATSAPP_CORPORATE_NUMBER}`;
 
 /**
- * Build a wa.me link, optionally with a prefilled (plain-text) message.
- * Pass a raw string — encoding is handled here.
+ * Build a WhatsApp click-to-chat link with an optional prefilled message.
+ * Pass a raw UTF-8 string — encoding is handled here via encodeURIComponent.
+ *
+ * IMPORTANT: Use api.whatsapp.com/send (not wa.me).
+ * wa.me performs a server redirect that corrupts 4-byte UTF-8 emoji sequences
+ * into U+FFFD (�). Linking directly avoids that mangling.
  */
 export function whatsappLink(
   message?: string,
   number: string = WHATSAPP_NUMBER,
 ): string {
-  const base = `https://wa.me/${number}`;
-  return message ? `${base}?text=${encodeURIComponent(message)}` : base;
+  const base = `https://api.whatsapp.com/send?phone=${number}`;
+  return message ? `${base}&text=${encodeURIComponent(message)}` : base;
 }
 
 /** Convenience wrapper for the corporate line. */

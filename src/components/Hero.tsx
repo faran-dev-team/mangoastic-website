@@ -7,7 +7,7 @@ import { ArrowRight, MessageCircle } from "lucide-react";
 import { motion, Variants } from "framer-motion";
 import { useEffect, useRef } from "react";
 
-import gsap from "gsap";
+import { gsap } from "@/lib/gsap";
 import { WHATSAPP_HREF } from "@/data/contact";
 
 export default function Hero() {
@@ -101,10 +101,11 @@ export default function Hero() {
         className="absolute inset-0 scale-100 will-change-transform"
       >
         <Image
-          src="/images/hero.png"
+          src="/images/hero.jpg"
           alt="Mango Orchard"
           fill
           priority
+          sizes="100vw"
           className="object-cover"
         />
       </div>

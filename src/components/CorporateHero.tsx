@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ArrowRight, ShoppingBag } from "lucide-react";
 import { motion, Variants } from "framer-motion";
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
+import { gsap } from "@/lib/gsap";
 import { corporateWhatsappLink } from "@/data/contact";
 
 const CORPORATE_WHATSAPP_HREF = corporateWhatsappLink(
@@ -107,11 +107,7 @@ export default function CorporateHero() {
 
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
 
-      <motion.div
-        className="pointer-events-none absolute left-[-8%] top-[12%] h-[280px] w-[280px] rounded-full bg-mango/15 blur-3xl"
-        animate={{ y: [0, -18, 0], opacity: [0.6, 1, 0.6] }}
-        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-      />
+      <div className="pointer-events-none absolute left-[-8%] top-[12%] h-[280px] w-[280px] rounded-full bg-mango/15 blur-3xl" />
 
       <div className="relative z-10 mx-auto flex min-h-[72vh] max-w-6xl items-center px-4 py-20 sm:min-h-[78vh] sm:px-6 sm:py-24 lg:min-h-[82vh] lg:px-8">
         <motion.div

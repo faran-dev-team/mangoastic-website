@@ -39,12 +39,10 @@ const cardVariants: Variants = {
   hidden: {
     opacity: 0,
     y: 40,
-    filter: "blur(8px)",
   },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: {
       duration: 0.9,
       ease: "easeOut",
@@ -97,19 +95,9 @@ export default function Features() {
               <div className="absolute inset-0 rounded-3xl border border-transparent transition-all duration-500 group-hover:border-mango/20" />
 
               {/* Icon */}
-              <motion.div
-                animate={{
-                  y: [0, -4, 0],
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="relative z-10 mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-mango/20 bg-mango/10"
-              >
+              <div className="relative z-10 mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-mango/20 bg-mango/10">
                 <Icon className="h-7 w-7 text-mango" strokeWidth={1.7} />
-              </motion.div>
+              </div>
 
               {/* Content */}
               <div className="relative z-10">

@@ -15,21 +15,19 @@ const containerVariants: Variants = {
 };
 
 const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 48, filter: "blur(10px)" },
+  hidden: { opacity: 0, y: 48 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: { duration: 0.9, ease: "easeOut" },
   },
 };
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 36, filter: "blur(8px)" },
+  hidden: { opacity: 0, y: 36 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: { duration: 0.8, ease: "easeOut" },
   },
 };
@@ -129,7 +127,7 @@ function FaqAccordionItem({
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+            transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
             className="overflow-hidden"
           >
             <p className="border-l-2 border-mango/35 px-4 pb-5 pl-9 font-outfit text-sm leading-relaxed text-zinc-400 sm:px-5 sm:pb-6 sm:pl-11 sm:text-[0.9375rem]">
@@ -166,7 +164,7 @@ export default function FaqPageContent() {
   return (
     <div className="bg-black text-white">
       <section className="relative overflow-hidden px-4 py-14 sm:px-6 sm:py-16 md:px-8 md:py-20">
-        <div className="pointer-events-none absolute left-1/2 top-0 h-[280px] w-[min(100%,520px)] -translate-x-1/2 rounded-full bg-mango/6 blur-3xl" />
+        <div className="pointer-events-none absolute left-1/2 top-0 h-[280px] w-[min(100%,520px)] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,163,10,0.08),transparent_70%)]" aria-hidden />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
         <motion.div

@@ -1,9 +1,11 @@
+import dynamic from "next/dynamic";
 import WhyHero from "@/components/WhyHero";
-import SixReasons from "@/components/SixReasons";
-import ComparisonTable from "@/components/ComparisonTable";
-import ClosingCta from "@/components/ClosingCta";
 
 export const revalidate = 0;
+
+const SixReasons = dynamic(() => import("@/components/SixReasons"));
+const ComparisonTable = dynamic(() => import("@/components/ComparisonTable"));
+const ClosingCta = dynamic(() => import("@/components/ClosingCta"));
 
 export default function WhyPage() {
   return (

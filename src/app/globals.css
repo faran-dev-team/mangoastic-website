@@ -1,6 +1,3 @@
-@import "slick-carousel/slick/slick.css";
-@import "slick-carousel/slick/slick-theme.css";
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,6 +6,33 @@
   --background: #0a0a0a;
   --foreground: #ededed;
   --mango: #ffa30a;
+
+  /*
+   * Admin dashboard tokens (Phase 6.1).
+   * Scoped under --admin-* so a future light/dark theme layer
+   * can remap values without refactoring components.
+   */
+  --admin-bg: #0a0a0a;
+  --admin-sidebar: #050505;
+  --admin-topnav: rgba(10, 10, 10, 0.82);
+  --admin-surface: rgba(24, 24, 27, 0.55);
+  --admin-surface-elevated: rgba(24, 24, 27, 0.85);
+  --admin-surface-hover: rgba(39, 39, 42, 0.7);
+  --admin-border: rgba(63, 63, 70, 0.55);
+  --admin-border-strong: rgba(82, 82, 91, 0.85);
+  --admin-text: #f4f4f5;
+  --admin-text-muted: #a1a1aa;
+  --admin-text-subtle: #71717a;
+  --admin-accent: #ffa30a;
+  --admin-accent-soft: rgba(255, 163, 10, 0.12);
+  --admin-focus-ring: rgba(255, 163, 10, 0.45);
+  --admin-sidebar-expanded: 15.5rem;
+  --admin-sidebar-collapsed: 4.5rem;
+  --admin-topnav-height: 3.75rem;
+  --admin-radius-md: 0.625rem;
+  --admin-radius-lg: 0.875rem;
+  --admin-shimmer-base: rgba(39, 39, 42, 0.55);
+  --admin-shimmer-highlight: rgba(82, 82, 91, 0.45);
 }
 
 @theme inline {
@@ -29,6 +53,19 @@
     color: var(--foreground);
     font-family: var(--font-outfit), system-ui, sans-serif;
   }
+
+  /*
+   * Decorative ambient orbs — contain paint so large blur layers
+   * do not invalidate the full page (same visual, cheaper compositing).
+   */
+  .floating-reels-glow,
+  .floating-glow,
+  .press-glow,
+  .orchard-ambient-glow {
+    contain: layout style paint;
+    transform: translateZ(0);
+    pointer-events: none;
+  }
 }
 
 /* DaisyUI theme tweaks can go here */
@@ -40,174 +77,171 @@
   background-color: #ff8a00;
 }
 
-/* Reels wall — react-slick + slick-theme (scoped overrides for dark UI) */
-.reels-arrows-wrap.slick-slider {
-  margin-bottom: 1.25rem;
-}
+/* -------------------------------------------------------------------------- */
+/* Admin shell — GPU-friendly motion (transform / opacity only)               */
+/* Prefer CSS over JS animation libraries for low-end device smoothness.      */
+/* Shimmer uses a transform slide on ::after — avoid background-position.     */
+/* -------------------------------------------------------------------------- */
 
-@media (min-width: 1024px) {
-  .reels-arrows-wrap.slick-slider {
-    margin-bottom: 1.75rem;
+@keyframes admin-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-
-.reels-arrows-wrap.slick-loading .slick-list {
-  background: rgb(24 24 27);
+@keyframes admin-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-.reels-wall-slider .slick-list {
-  margin: 0 -0.25rem;
+.admin-page-enter {
+  animation: admin-fade-up 240ms ease-out both;
 }
 
-.reels-arrows-wrap--tablet.reels-wall-slider .slick-list,
-.reels-arrows-wrap--desktop.reels-wall-slider .slick-list {
-  padding: 4.25rem 0 1.75rem;
+.admin-section-enter {
+  animation: admin-fade-up 260ms ease-out both;
 }
 
-.reels-arrows-wrap--mobile.reels-wall-slider .slick-list {
-  padding: 0.75rem 0 2.25rem;
+.admin-card-enter {
+  animation: admin-fade-up 280ms ease-out both;
+}
+
+.admin-topnav-fade {
+  animation: admin-fade-in 220ms ease-out both;
+}
+
+@keyframes admin-shimmer-slide {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.admin-shimmer {
+  position: relative;
   overflow: hidden;
+  background-color: var(--admin-shimmer-base);
+  contain: paint;
 }
 
-.reels-wall-slider .slick-slide > div {
-  height: 100%;
+.admin-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--admin-shimmer-highlight) 50%,
+    transparent 100%
+  );
+  animation: admin-shimmer-slide 1.15s ease-in-out infinite;
 }
 
-/* Mobile slider: centered reel, prev/next on left & right */
-.reels-arrows-wrap--mobile.reels-wall-slider .slick-slide {
-  display: flex !important;
-  justify-content: center;
-  align-items: center;
-  height: auto;
+.admin-stat-card {
+  min-height: 8.25rem;
+  contain: layout style;
 }
 
-.reels-arrows-wrap--mobile.reels-wall-slider .slick-slide > div {
-  width: 100%;
-  display: flex;
-  justify-content: center;
+@keyframes admin-badge-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-.reels-arrows-wrap--mobile .slick-prev,
-.reels-arrows-wrap--mobile .slick-next {
-  top: 50% !important;
-  bottom: auto !important;
-  margin-bottom: 0 !important;
-  transform: translateY(-50%) !important;
-  -webkit-transform: translateY(-50%) !important;
-  width: 2.5rem !important;
-  height: 2.5rem !important;
+.admin-badge-enter {
+  animation: admin-badge-enter 200ms ease-out both;
 }
 
-.reels-arrows-wrap--mobile .slick-prev {
-  left: -10px !important;
-  right: auto !important;
+.admin-table-row {
+  animation: admin-fade-up 220ms ease-out both;
 }
 
-.reels-arrows-wrap--mobile .slick-next {
-  right: -10px !important;
-  left: auto !important;
+.admin-table-row-skeleton {
+  min-height: 3.25rem;
 }
 
-/* Tablet + desktop: arrows top-right above the grid */
-.reels-arrows-wrap--tablet .slick-prev,
-.reels-arrows-wrap--tablet .slick-next,
-.reels-arrows-wrap--desktop .slick-prev,
-.reels-arrows-wrap--desktop .slick-next {
-  top: 0.75rem !important;
-  bottom: auto !important;
-  transform: none !important;
-  -webkit-transform: none !important;
+.admin-filter-panel {
+  animation: admin-fade-up 220ms ease-out both;
 }
 
-.reels-arrows-wrap--tablet .slick-next,
-.reels-arrows-wrap--desktop .slick-next {
-  right: 1rem !important;
-  left: auto !important;
+.admin-filter-chip {
+  animation: admin-badge-enter 180ms ease-out both;
 }
 
-.reels-arrows-wrap--tablet .slick-prev,
-.reels-arrows-wrap--desktop .slick-prev {
-  right: calc(1rem + 2.75rem + 0.5rem) !important;
-  left: auto !important;
+.admin-order-section {
+  animation: admin-fade-up 220ms ease-out both;
 }
 
-.reels-arrows-wrap--tablet.reels-wall-slider .slick-track,
-.reels-arrows-wrap--desktop.reels-wall-slider .slick-track {
-  display: flex;
-  align-items: stretch;
+.admin-order-detail-content {
+  animation: admin-fade-in 200ms ease-out both;
 }
 
-.reels-arrows-wrap--tablet.reels-wall-slider .slick-slide {
-  padding: 0 0.35rem;
+.admin-filter-select {
+  background-image: linear-gradient(45deg, transparent 50%, var(--admin-text-subtle) 50%),
+    linear-gradient(135deg, var(--admin-text-subtle) 50%, transparent 50%);
+  background-position:
+    calc(100% - 16px) calc(50% - 2px),
+    calc(100% - 11px) calc(50% - 2px);
+  background-size:
+    5px 5px,
+    5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 2.25rem;
 }
 
-.reels-wall-slider .slick-dots {
-  bottom: 0;
-  width: 100%;
+.admin-search-input::-webkit-search-cancel-button {
+  display: none;
 }
 
-.reels-wall-slider .slick-dots li {
-  margin: 0 3px;
+@media (prefers-reduced-motion: reduce) {
+  .admin-page-enter,
+  .admin-section-enter,
+  .admin-card-enter,
+  .admin-topnav-fade,
+  .admin-sidebar,
+  .admin-btn-press,
+  .admin-shimmer,
+  .admin-stat-card,
+  .admin-badge-enter,
+  .admin-table-row,
+  .admin-filter-panel,
+  .admin-filter-chip,
+  .admin-order-section,
+  .admin-order-detail-content {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .admin-shimmer::after {
+    animation: none !important;
+    display: none;
+  }
+
+  .admin-shimmer {
+    background-image: none;
+    background-color: var(--admin-shimmer-base);
+  }
 }
 
-.reels-wall-slider .slick-dots li button:before {
-  font-size: 8px;
-  color: rgb(82 82 91);
-  opacity: 1;
+/* Avoid sidebar width animation on first paint (hydration of collapsed preference). */
+[data-admin-shell-ready="false"] .admin-sidebar {
+  transition: none !important;
 }
 
-.reels-wall-slider .slick-dots li.slick-active button:before {
-  color: rgb(245 158 11);
-  opacity: 1;
-}
-
-/*
- * slick-theme sets .slick-prev/.slick-next to font-size:0 and tiny 20×20 boxes —
- * that breaks Lucide SVGs. Reset and style our custom arrow buttons.
- */
-.reels-arrows-wrap .slick-prev,
-.reels-arrows-wrap .slick-next {
-  font-size: inherit;
-  line-height: 1;
-  width: 2.75rem;
-  height: 2.75rem;
-  padding: 0;
-  z-index: 20;
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.5rem;
-  border: 1px solid rgb(217 119 6);
-  background: var(--mango);
-  color: rgb(255 255 255);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.2) inset,
-    0 8px 20px -6px rgba(0, 0, 0, 0.45);
-  transition:
-    border-color 0.2s,
-    color 0.2s,
-    background 0.2s,
-    box-shadow 0.2s;
-}
-
-.reels-arrows-wrap .slick-prev:hover,
-.reels-arrows-wrap .slick-prev:focus,
-.reels-arrows-wrap .slick-next:hover,
-.reels-arrows-wrap .slick-next:focus {
-  color: rgb(255 255 255);
-  background: rgb(255 140 0);
-  border-color: rgb(194 65 12);
-  outline: none;
-}
-
-.reels-arrows-wrap .slick-prev:before,
-.reels-arrows-wrap .slick-next:before {
-  display: none !important;
-}
-
-.reels-arrows-wrap .slick-prev.slick-disabled,
-.reels-arrows-wrap .slick-next.slick-disabled {
-  opacity: 0.35;
-  pointer-events: none;
-}

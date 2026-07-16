@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, Variants } from "framer-motion";
-import gsap from "gsap";
+import { useInViewport } from "@/hooks/useInViewport";
 
 const MIN_TRUST_LOGOS = 3;
 
@@ -37,47 +36,25 @@ const containerVariants: Variants = {
 };
 
 const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
+  hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: { duration: 0.9, ease: "easeOut" },
   },
 };
 
 const stepVariants: Variants = {
-  hidden: { opacity: 0, y: 36, filter: "blur(8px)" },
+  hidden: { opacity: 0, y: 36 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: { duration: 0.85, ease: "easeOut" },
   },
 };
 
 function TrustStrip() {
-  const stripRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.to(".corp-trust-shine", {
-        x: "140%",
-        duration: 3,
-        repeat: -1,
-        repeatDelay: 5,
-        ease: "power2.inOut",
-      });
-      gsap.to(".corp-trust-track", {
-        y: -5,
-        duration: 3.5,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
-    }, stripRef);
-    return () => ctx.revert();
-  }, []);
+  const { ref: marqueeRef, inView } = useInViewport<HTMLDivElement>();
 
   if (TRUST_LOGOS.length < MIN_TRUST_LOGOS) return null;
 
@@ -85,7 +62,6 @@ function TrustStrip() {
 
   return (
     <motion.div
-      ref={stripRef}
       variants={fadeUp}
       className="border-b border-zinc-800/80 pb-12 sm:pb-14"
       aria-label="Companies we've gifted"
@@ -106,10 +82,17 @@ function TrustStrip() {
         />
       </div>
 
-      <motion.div className="relative mt-8 overflow-hidden py-6 sm:py-8 [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
-        <motion.div className="pointer-events-none absolute inset-y-0 left-[-30%] z-20 w-[20%] skew-x-[-25deg] bg-gradient-to-r from-transparent via-white/10 to-transparent blur-xl corp-trust-shine" />
+      <div
+        ref={marqueeRef}
+        className="relative mt-8 overflow-hidden py-6 sm:py-8 [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]"
+      >
+        <div className="pointer-events-none absolute inset-y-0 left-[-30%] z-20 w-[20%] skew-x-[-25deg] bg-gradient-to-r from-transparent via-white/10 to-transparent blur-xl corp-trust-shine" />
 
-        <motion.div className="corp-trust-track flex w-max animate-press-marquee items-center hover:[animation-play-state:paused]">
+        <div
+          className={`corp-trust-track flex w-max animate-press-marquee items-center hover:[animation-play-state:paused] ${
+            !inView ? "[animation-play-state:paused]" : ""
+          }`}
+        >
           {track.map((logo, index) => (
             <motion.div
               key={`${logo.src}-${index}`}
@@ -117,8 +100,8 @@ function TrustStrip() {
               transition={{ type: "spring", stiffness: 220, damping: 18 }}
               className="mx-6 flex h-12 w-28 shrink-0 items-center justify-center sm:mx-10 sm:h-14 sm:w-36 md:mx-14"
             >
-              <motion.div className="group relative h-full w-full opacity-70 transition duration-500 hover:opacity-100">
-                <motion.div className="absolute inset-0 rounded-xl bg-amber-500/0 blur-2xl transition duration-500 group-hover:bg-amber-500/10" />
+              <div className="group relative h-full w-full opacity-70 transition duration-500 hover:opacity-100">
+                <div className="absolute inset-0 rounded-xl bg-amber-500/0 transition duration-500 group-hover:bg-amber-500/10" />
                 <Image
                   src={logo.src}
                   alt={logo.alt}
@@ -126,11 +109,11 @@ function TrustStrip() {
                   className="object-contain object-center grayscale transition duration-500 group-hover:scale-[1.04] group-hover:grayscale-0"
                   sizes="(max-width: 768px) 112px, 144px"
                 />
-              </motion.div>
+              </div>
             </motion.div>
           ))}
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </motion.div>
   );
 }
@@ -140,13 +123,9 @@ export default function CorporateTrustAndSteps() {
 
   return (
     <section className="relative overflow-hidden border-t border-zinc-800/80 bg-black px-4 py-14 sm:px-6 sm:py-16 md:px-8 md:py-20">
-      <motion.div className="absolute left-[-10%] top-[8%] h-[260px] w-[260px] rounded-full bg-mango/10 blur-3xl" />
-      <motion.div
-        className="absolute bottom-[-15%] right-[-8%] h-[300px] w-[300px] rounded-full bg-orange-500/10 blur-3xl"
-        animate={{ y: [0, -24, 0] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      <div className="pointer-events-none absolute left-[-10%] top-[8%] h-[260px] w-[260px] rounded-full bg-[radial-gradient(circle,rgba(255,163,10,0.12),transparent_70%)]" aria-hidden />
+      <div className="pointer-events-none absolute bottom-[-15%] right-[-8%] h-[300px] w-[300px] rounded-full bg-[radial-gradient(circle,rgba(249,115,22,0.12),transparent_70%)]" aria-hidden />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
       <motion.div
         variants={containerVariants}
@@ -181,9 +160,9 @@ export default function CorporateTrustAndSteps() {
                 transition={{ type: "spring", stiffness: 220, damping: 18 }}
                 className="group relative list-none cursor-default overflow-hidden border-t border-zinc-800 pt-6 sm:border-t-0 sm:border-l sm:border-zinc-800 sm:pl-6 sm:pt-0 first:sm:border-l-0 first:sm:pl-0"
               >
-                <motion.div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100">
-                  <motion.div className="absolute -left-[120%] top-0 h-full w-[80%] rotate-12 bg-gradient-to-r from-transparent via-white/10 to-transparent transition-all duration-1000 group-hover:left-[140%]" />
-                </motion.div>
+                <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100">
+                  <div className="absolute -left-[120%] top-0 h-full w-[80%] rotate-12 bg-gradient-to-r from-transparent via-white/10 to-transparent transition-all duration-1000 group-hover:left-[140%]" />
+                </div>
 
                 <p
                   className="relative z-10 font-outfit text-3xl font-semibold tabular-nums text-mango sm:text-4xl"

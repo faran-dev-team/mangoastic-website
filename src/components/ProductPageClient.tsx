@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ProductGallery } from "./pdp/ProductGallery";
 import { ProductDetails } from "./pdp/ProductDetails";
 import { ProductSelectors } from "./pdp/ProductSelectors";
+import { DeliveryDetails, type DeliveryDetailsValue } from "./pdp/DeliveryDetails";
 import { ProductCTAs } from "./pdp/ProductCTAs";
 import { ProductTabsSection } from "./pdp/ProductTabsSection";
 import { ProductReviews } from "./pdp/ProductReviews";
@@ -13,12 +14,27 @@ import { ProductFooterCTA } from "./pdp/ProductFooterCTA";
 import {
   type BoxWeight,
   type MangoProduct,
+  formatPKR,
   getProductPrice,
 } from "@/data/products";
+import { usePlaceOrder } from "@/hooks/usePlaceOrder";
 
 type Props = {
   product: MangoProduct;
   related: RelatedItem[];
+};
+
+const EMPTY_DELIVERY: DeliveryDetailsValue = {
+  customerName: "",
+  phoneNumber: "",
+  city: "",
+  address: "",
+  landmark: "",
+  notes: "",
+};
+
+const ADDON_LABELS: Record<string, string> = {
+  "mango-honey": "Mango Honey 250g",
 };
 
 export default function ProductPageClient({ product, related }: Props) {
@@ -34,18 +50,94 @@ export default function ProductPageClient({ product, related }: Props) {
   const [addons, setAddons] = useState<Record<string, boolean>>({
     "mango-honey": false,
   });
+  const [delivery, setDelivery] = useState<DeliveryDetailsValue>(EMPTY_DELIVERY);
+  const [clientError, setClientError] = useState<string | null>(null);
+
+  const {
+    isSubmitting,
+    isSuccess,
+    errorMessage,
+    fieldErrors,
+    placeOrder,
+    resetError,
+  } = usePlaceOrder();
 
   const selectedPrice = getProductPrice(product, boxWeight);
   const weightLabel = boxWeight === "5kg" ? "5 kg" : "8 kg";
 
-  const whatsappMessage = encodeURIComponent(
-    `Hi Mangoastic, I'd like to order ${quantity} x ${product.name} (${weightLabel} box). Price: ${selectedPrice}. Ripeness: ${ripeness}. Add-ons: ${
+  const selectedAddonLabels = useMemo(
+    () =>
       Object.entries(addons)
         .filter(([, checked]) => checked)
-        .map(([key]) => key)
-        .join(", ") || "none"
-    }.`,
+        .map(([key]) => ADDON_LABELS[key] ?? key),
+    [addons],
   );
+
+  const totalPrice = useMemo(() => {
+    const base = Number(selectedPrice.replace(/[^0-9]/g, ""));
+    const addonTotal = addons["mango-honey"] ? 850 : 0;
+    return (base + addonTotal) * quantity;
+  }, [addons, quantity, selectedPrice]);
+
+  const totalPriceLabel = formatPKR(totalPrice);
+
+  const validateClient = (): string | null => {
+    if (!delivery.customerName.trim()) return "Please enter your full name.";
+    if (!delivery.phoneNumber.trim()) return "Please enter your phone number.";
+    if (!delivery.city.trim()) return "Please enter your city.";
+    if (!delivery.address.trim() || delivery.address.trim().length < 5) {
+      return "Please enter a complete delivery address.";
+    }
+    return null;
+  };
+
+  const handlePlaceOrder = async () => {
+    resetError();
+    setClientError(null);
+
+    const validationMessage = validateClient();
+    if (validationMessage) {
+      setClientError(validationMessage);
+      return;
+    }
+
+    await placeOrder(
+      {
+        customerName: delivery.customerName.trim(),
+        phoneNumber: delivery.phoneNumber.trim(),
+        city: delivery.city.trim(),
+        address: delivery.address.trim(),
+        landmark: delivery.landmark.trim() || undefined,
+        notes: delivery.notes.trim() || undefined,
+        mangoName: product.name,
+        boxSize: boxWeight,
+        quantity,
+        ripeness,
+        addons: selectedAddonLabels,
+      },
+      {
+        customerName: delivery.customerName.trim(),
+        phoneNumber: delivery.phoneNumber.trim(),
+        city: delivery.city.trim(),
+        address: delivery.address.trim(),
+        landmark: delivery.landmark.trim() || undefined,
+        notes: delivery.notes.trim() || undefined,
+        mangoName: product.name,
+        boxSize: weightLabel,
+        quantity,
+        ripeness,
+        addons: selectedAddonLabels,
+        totalPrice,
+      },
+    );
+  };
+
+  // Footer WhatsApp keeps a helpful prefilled message (no order ID until placed).
+  const supportWhatsAppMessage = encodeURIComponent(
+    `Hi Mangoastic, I have a question about ${product.name} (${weightLabel} box).`,
+  );
+
+  const combinedError = clientError || errorMessage;
 
   return (
     <div className="bg-[#f6f1e8] px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
@@ -90,10 +182,27 @@ export default function ProductPageClient({ product, related }: Props) {
               productPrice={selectedPrice}
             />
 
+            <DeliveryDetails
+              value={delivery}
+              onChange={(next) => {
+                setDelivery(next);
+                setClientError(null);
+                resetError();
+              }}
+              fieldErrors={fieldErrors}
+              disabled={isSubmitting || isSuccess}
+            />
+
             <ProductCTAs
               productPrice={selectedPrice}
               quantity={quantity}
-              whatsappMessage={whatsappMessage}
+              totalPriceLabel={totalPriceLabel}
+              isSubmitting={isSubmitting}
+              isSuccess={isSuccess}
+              errorMessage={combinedError}
+              onPlaceOrder={() => {
+                void handlePlaceOrder();
+              }}
             />
           </div>
         </div>
@@ -110,7 +219,7 @@ export default function ProductPageClient({ product, related }: Props) {
 
         <ProductRelated related={related} />
 
-        <ProductFooterCTA whatsappMessage={whatsappMessage} />
+        <ProductFooterCTA whatsappMessage={supportWhatsAppMessage} />
       </div>
     </div>
   );

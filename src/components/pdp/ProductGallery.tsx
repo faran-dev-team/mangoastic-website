@@ -86,7 +86,7 @@ export function ProductGallery({
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-black/15" />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-xl">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-zinc-950/90 text-white">
                     <Play
                       className="ml-1 h-7 w-7 fill-current"
                       strokeWidth={0}

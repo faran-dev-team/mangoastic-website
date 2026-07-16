@@ -5,10 +5,11 @@ import Image from "next/image";
 
 import { motion } from "framer-motion";
 
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
+import { ensureGsapScrollTrigger, gsap } from "@/lib/gsap";
 
-gsap.registerPlugin(ScrollTrigger);
+import { useInViewport } from "@/hooks/useInViewport";
+
+ensureGsapScrollTrigger();
 
 /** Minimum logos before the strip renders. */
 const MIN_PRESS_LOGOS = 3;
@@ -25,6 +26,7 @@ const PRESS_LOGOS: { alt: string; src: string }[] = [
 
 export default function PressStrip() {
   const sectionRef = useRef<HTMLElement | null>(null);
+  const { ref: marqueeRef, inView } = useInViewport<HTMLDivElement>();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -34,12 +36,10 @@ export default function PressStrip() {
         {
           opacity: 0,
           y: 50,
-          filter: "blur(10px)",
         },
         {
           opacity: 1,
           y: 0,
-          filter: "blur(0px)",
           duration: 1.3,
           stagger: 0.15,
           ease: "power3.out",
@@ -49,33 +49,6 @@ export default function PressStrip() {
           },
         },
       );
-
-      // Floating marquee movement
-      gsap.to(".press-track", {
-        y: -5,
-        duration: 3.5,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
-
-      // Ambient glow movement
-      gsap.to(".press-glow", {
-        x: 40,
-        duration: 8,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
-
-      // Shine sweep animation
-      gsap.to(".press-shine", {
-        x: "140%",
-        duration: 3,
-        repeat: -1,
-        repeatDelay: 5,
-        ease: "power2.inOut",
-      });
     }, sectionRef);
 
     return () => ctx.revert();
@@ -94,7 +67,7 @@ export default function PressStrip() {
       aria-label="Press and media coverage"
     >
       {/* Ambient Glow */}
-      <div className="press-glow absolute left-[10%] top-1/2 h-[220px] w-[220px] -translate-y-1/2 rounded-full bg-amber-500/10 blur-3xl" />
+      <div className="press-glow pointer-events-none absolute left-[10%] top-1/2 h-[220px] w-[220px] -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(245,158,11,0.12),transparent_70%)]" aria-hidden />
 
       {/* Top Divider Glow */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
@@ -160,11 +133,18 @@ export default function PressStrip() {
       </div>
 
       {/* Marquee */}
-      <div className="relative overflow-hidden py-8 sm:py-10 [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
+      <div
+        ref={marqueeRef}
+        className="relative overflow-hidden py-8 sm:py-10 [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]"
+      >
         {/* Shine Sweep */}
         <div className="pointer-events-none absolute inset-y-0 left-[-30%] z-20 w-[20%] skew-x-[-25deg] bg-gradient-to-r from-transparent via-white/10 to-transparent blur-xl press-shine" />
 
-        <div className="press-track flex w-max animate-press-marquee items-center hover:[animation-play-state:paused]">
+        <div
+          className={`press-track flex w-max animate-press-marquee items-center hover:[animation-play-state:paused] ${
+            !inView ? "[animation-play-state:paused]" : ""
+          }`}
+        >
           {track.map((logo, index) => (
             <motion.div
               key={`${logo.src}-${index}`}
@@ -181,7 +161,7 @@ export default function PressStrip() {
             >
               <div className="group relative h-full w-full opacity-70 transition duration-500 hover:opacity-100">
                 {/* Glow Behind Logo */}
-                <div className="absolute inset-0 rounded-xl bg-amber-500/0 blur-2xl transition duration-500 group-hover:bg-amber-500/10" />
+                <div className="absolute inset-0 rounded-xl bg-amber-500/0 transition duration-500 group-hover:bg-amber-500/10" />
 
                 <Image
                   src={logo.src}

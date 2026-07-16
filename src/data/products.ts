@@ -2,6 +2,7 @@ import type { GalleryTile } from "@/components/pdp/ProductGallery";
 import type { Tab } from "@/components/pdp/ProductTabsSection";
 import type { Review } from "@/components/pdp/ProductReviews";
 import type { RelatedItem } from "@/components/pdp/ProductRelated";
+import { formatPKR } from "@/lib/format/money";
 
 export type BoxWeight = "5kg" | "8kg";
 
@@ -22,9 +23,7 @@ export type MangoProduct = {
   reviews: Review[];
 };
 
-export function formatPKR(amount: number): string {
-  return `PKR ${amount.toLocaleString("en-PK")}`;
-}
+export { formatPKR } from "@/lib/format/money";
 
 export function getProductPrice(
   product: MangoProduct,

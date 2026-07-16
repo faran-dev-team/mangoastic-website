@@ -1,9 +1,5 @@
-"use client";
-
-import React from "react";
-import { motion, type Variants } from "framer-motion";
-
-const smoothEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
+import FadeIn from "@/components/motion/FadeIn";
+import { Stagger, StaggerItem } from "@/components/motion/Stagger";
 
 const reasons = [
   {
@@ -44,166 +40,61 @@ const reasons = [
   },
 ];
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.12,
-    },
-  },
-};
-
-const fadeUp: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 60,
-    filter: "blur(10px)",
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: {
-      duration: 0.9,
-      ease: smoothEase,
-    },
-  },
-};
-
 export default function SixReasons() {
   return (
     <section className="relative overflow-hidden bg-black px-4 py-20 sm:px-6 lg:px-8">
-      {/* Ambient Glow */}
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div
-          animate={{
-            y: [0, -30, 0],
-            opacity: [0.25, 0.4, 0.25],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute left-[-10rem] top-20 h-[28rem] w-[28rem] rounded-full bg-amber-500/10 blur-3xl"
-        />
-
-        <motion.div
-          animate={{
-            y: [0, 25, 0],
-            opacity: [0.15, 0.3, 0.15],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute bottom-0 right-[-12rem] h-[26rem] w-[26rem] rounded-full bg-orange-400/10 blur-3xl"
-        />
+      <div className="absolute inset-0 overflow-hidden" aria-hidden>
+        <div className="pointer-events-none absolute left-[-10rem] top-20 h-[28rem] w-[28rem] rounded-full bg-[radial-gradient(circle,rgba(245,158,11,0.12),transparent_70%)]" />
+        <div className="pointer-events-none absolute bottom-0 right-[-12rem] h-[26rem] w-[26rem] rounded-full bg-[radial-gradient(circle,rgba(251,146,60,0.12),transparent_70%)]" />
       </div>
 
       <div className="relative mx-auto max-w-6xl">
-        {/* Header */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={containerVariants}
-          className="mb-16 text-center"
-        >
-          <motion.p
-            variants={fadeUp}
-            className="font-outfit text-sm font-normal uppercase tracking-widest text-amber-400 sm:text-base"
-          >
+        <FadeIn amount={0.3} className="mb-16 text-center">
+          <p className="font-outfit text-sm font-normal uppercase tracking-widest text-amber-400 sm:text-base">
             The Difference
-          </motion.p>
+          </p>
 
-          <motion.h2
-            variants={fadeUp}
-            className="mt-4 font-display text-3xl font-light text-white sm:text-4xl md:text-5xl"
-          >
+          <h2 className="mt-4 font-display text-3xl font-light text-white sm:text-4xl md:text-5xl">
             Six things that make a Mangoastic box different.
-          </motion.h2>
+          </h2>
 
-          <motion.p
-            variants={fadeUp}
-            className="mx-auto mt-6 max-w-2xl font-outfit text-base leading-relaxed text-zinc-400 sm:text-lg"
-          >
+          <p className="mx-auto mt-6 max-w-2xl font-outfit text-base leading-relaxed text-zinc-400 sm:text-lg">
             Some of these are about the fruit. Some are about everything around
             it.
-          </motion.p>
-        </motion.div>
+          </p>
+        </FadeIn>
 
-        {/* Reasons Grid */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          variants={containerVariants}
+        <Stagger
           className="grid gap-8 md:grid-cols-2 lg:gap-12"
+          stagger={0.12}
+          amount={0.1}
         >
           {reasons.map((reason) => (
-            <motion.div
-              key={reason.number}
-              variants={fadeUp}
-              whileHover={{
-                y: -10,
-                borderColor: "rgba(251,191,36,0.4)",
-              }}
-              transition={{
-                duration: 0.35,
-                ease: "easeOut",
-              }}
-              className="group relative overflow-hidden border border-zinc-800 bg-zinc-950/50 p-8 backdrop-blur-sm sm:p-10"
-            >
-              {/* Hover Glow */}
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-400/5 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+            <StaggerItem key={reason.number} y={40}>
+              <article className="group relative overflow-hidden border border-zinc-800 bg-zinc-950/90 p-8 transition duration-300 hover:-translate-y-2 hover:border-amber-400/40 motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:p-10">
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-400/5 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
-              {/* Number + Title */}
-              <div className="relative mb-6">
-                <div className="flex items-baseline gap-4">
-                  <motion.span
-                    whileHover={{
-                      scale: 1.08,
-                    }}
-                    transition={{
-                      duration: 0.25,
-                    }}
-                    className="font-display text-4xl font-light text-amber-400 sm:text-5xl"
-                  >
-                    {reason.number}
-                  </motion.span>
+                <div className="relative mb-6">
+                  <div className="flex items-baseline gap-4">
+                    <span className="font-display text-4xl font-light text-amber-400 transition-transform duration-300 group-hover:scale-105 motion-reduce:transition-none sm:text-5xl">
+                      {reason.number}
+                    </span>
 
-                  <h3 className="font-display text-lg font-light text-white sm:text-xl md:text-2xl">
-                    {reason.title}
-                  </h3>
+                    <h3 className="font-display text-lg font-light text-white sm:text-xl md:text-2xl">
+                      {reason.title}
+                    </h3>
+                  </div>
                 </div>
-              </div>
 
-              {/* Description */}
-              <p className="relative font-outfit text-sm leading-relaxed text-zinc-300 sm:text-base sm:leading-relaxed">
-                {reason.description}
-              </p>
+                <p className="relative font-outfit text-sm leading-relaxed text-zinc-300 sm:text-base sm:leading-relaxed">
+                  {reason.description}
+                </p>
 
-              {/* Accent Line */}
-              <motion.div
-                initial={{
-                  width: 0,
-                  opacity: 0,
-                }}
-                whileHover={{
-                  width: 80,
-                  opacity: 1,
-                }}
-                transition={{
-                  duration: 0.4,
-                  ease: "easeOut",
-                }}
-                className="mt-6 h-[2px] bg-gradient-to-r from-amber-400 to-transparent"
-              />
-            </motion.div>
+                <div className="mt-6 h-[2px] w-0 bg-gradient-to-r from-amber-400 to-transparent opacity-0 transition-all duration-400 ease-out group-hover:w-20 group-hover:opacity-100 motion-reduce:transition-none" />
+              </article>
+            </StaggerItem>
           ))}
-        </motion.div>
+        </Stagger>
       </div>
     </section>
   );

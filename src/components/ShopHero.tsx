@@ -3,8 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useLayoutEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ensureGsapScrollTrigger, gsap } from "@/lib/gsap";
 
 export default function ShopHero() {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -12,7 +11,7 @@ export default function ShopHero() {
   const overlayRef = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+    ensureGsapScrollTrigger();
 
     const ctx = gsap.context(() => {
       // Cinematic intro zoom
@@ -94,7 +93,7 @@ export default function ShopHero() {
 
       {/* Ambient glow */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute left-1/2 top-1/2 h-[32rem] w-[32rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-500/10 blur-3xl" />
+        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[32rem] w-[32rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(245,158,11,0.12),transparent_70%)]" aria-hidden />
       </div>
 
       {/* Content */}
@@ -115,8 +114,8 @@ export default function ShopHero() {
 
           {/* Heading */}
           <motion.h1
-            initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{
               duration: 1.2,
               delay: 0.15,
@@ -145,14 +144,14 @@ export default function ShopHero() {
 
           {/* Decorative line */}
           <motion.div
-            initial={{ width: 0, opacity: 0 }}
-            animate={{ width: "120px", opacity: 1 }}
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={{ scaleX: 1, opacity: 1 }}
             transition={{
-              duration: 1,
+              duration: 0.2,
               delay: 0.7,
               ease: "easeOut",
             }}
-            className="mt-8 h-px bg-gradient-to-r from-amber-400 via-amber-300 to-transparent"
+            className="mt-8 h-px origin-left bg-gradient-to-r from-amber-400 via-amber-300 to-transparent w-[120px]"
           />
         </div>
       </div>

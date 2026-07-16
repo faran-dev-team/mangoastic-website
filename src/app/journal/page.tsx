@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Journal — Mangoastic",
+  robots: { index: false, follow: false },
+};
+
 export default function JournalPage() {
   return (
     <div className="mx-auto max-w-5xl px-6 py-12">

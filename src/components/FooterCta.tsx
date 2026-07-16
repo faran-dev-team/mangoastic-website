@@ -4,10 +4,9 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 
 import { motion, useReducedMotion } from "framer-motion";
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
+import { ensureGsapScrollTrigger, gsap } from "@/lib/gsap";
 
-gsap.registerPlugin(ScrollTrigger);
+ensureGsapScrollTrigger();
 
 export default function FooterCta({
   reservePassComingSoon = false,
@@ -29,12 +28,10 @@ export default function FooterCta({
         {
           opacity: 0,
           y: 60,
-          filter: "blur(10px)",
         },
         {
           opacity: 1,
           y: 0,
-          filter: "blur(0px)",
           duration: 1.2,
           ease: "power3.out",
           stagger: 0.14,
@@ -45,26 +42,6 @@ export default function FooterCta({
           },
         },
       );
-
-      // Ambient glow drift
-      gsap.to(".footer-glow", {
-        y: -22,
-        x: 16,
-        duration: 7,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
-
-      // Soft urgency pulse
-      gsap.to(".footer-urgent", {
-        opacity: 0.8,
-        scale: 1.015,
-        duration: 2,
-        repeat: -1,
-        yoyo: true,
-        ease: "power1.inOut",
-      });
     }, sectionRef);
 
     return () => ctx.revert();
@@ -76,7 +53,7 @@ export default function FooterCta({
       className="relative overflow-hidden bg-[#0f0e0c] px-4 py-16 sm:px-6 sm:py-20 md:py-24"
     >
       {/* Ambient Glow */}
-      <div className="footer-glow absolute left-1/2 top-1/3 h-[340px] w-[340px] -translate-x-1/2 rounded-full bg-amber-500/10 blur-3xl" />
+      <div className="footer-glow pointer-events-none absolute left-1/2 top-1/3 h-[340px] w-[340px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(245,158,11,0.12),transparent_70%)]" aria-hidden />
 
       {/* Subtle vignette */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_40%,black_90%)]" />

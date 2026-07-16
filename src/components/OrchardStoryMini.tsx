@@ -7,10 +7,9 @@ import { motion } from "framer-motion";
 
 import { useEffect, useRef } from "react";
 
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
+import { ensureGsapScrollTrigger, gsap } from "@/lib/gsap";
 
-gsap.registerPlugin(ScrollTrigger);
+ensureGsapScrollTrigger();
 
 export default function OrchardStoryMini() {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -37,25 +36,6 @@ export default function OrchardStoryMini() {
           },
         },
       );
-
-      // Cinematic overlay breathing
-      gsap.to(".orchard-overlay-glow", {
-        opacity: 0.6,
-        duration: 4,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
-
-      // Floating ambient glow
-      gsap.to(".orchard-ambient-glow", {
-        y: -30,
-        x: 10,
-        duration: 8,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
     }, sectionRef);
 
     return () => ctx.revert();

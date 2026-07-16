@@ -6,12 +6,11 @@ import Link from "next/link";
 import { motion, Variants } from "framer-motion";
 import { useEffect, useRef } from "react";
 
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
+import { ensureGsapScrollTrigger, gsap } from "@/lib/gsap";
 
 import { formatPKR, getVarietyCards } from "@/data/products";
 
-gsap.registerPlugin(ScrollTrigger);
+ensureGsapScrollTrigger();
 
 const varieties = getVarietyCards();
 
@@ -28,12 +27,10 @@ const cardVariants: Variants = {
   hidden: {
     opacity: 0,
     y: 50,
-    filter: "blur(10px)",
   },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: {
       duration: 1,
       ease: "easeOut",
@@ -63,14 +60,6 @@ export default function SeasonBoxes() {
           },
         },
       );
-
-      gsap.to(".floating-glow", {
-        y: -30,
-        duration: 6,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
     }, sectionRef);
 
     return () => ctx.revert();
@@ -81,8 +70,8 @@ export default function SeasonBoxes() {
       ref={sectionRef}
       className="relative overflow-hidden bg-black px-4 pt-16 pb-4 sm:px-6 sm:pt-20 md:px-8 md:pt-24 lg:pt-28"
     >
-      <div className="floating-glow absolute left-[-10%] top-[10%] h-[320px] w-[320px] rounded-full bg-mango/10 blur-3xl" />
-      <div className="absolute bottom-[-20%] right-[-10%] h-[360px] w-[360px] rounded-full bg-orange-500/10 blur-3xl" />
+      <div className="floating-glow pointer-events-none absolute left-[-10%] top-[10%] h-[320px] w-[320px] rounded-full bg-[radial-gradient(circle,rgba(255,163,10,0.12),transparent_70%)]" aria-hidden />
+      <div className="pointer-events-none absolute bottom-[-20%] right-[-10%] h-[360px] w-[360px] rounded-full bg-[radial-gradient(circle,rgba(249,115,22,0.12),transparent_70%)]" aria-hidden />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
       <div className="relative z-10 mx-auto max-w-6xl">
@@ -91,7 +80,7 @@ export default function SeasonBoxes() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="mx-auto mb-5 flex w-fit items-center rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 backdrop-blur-xl"
+          className="mx-auto mb-5 flex w-fit items-center rounded-full border border-white/10 bg-white/[0.06] px-4 py-1.5"
         >
           <span className="font-outfit text-[11px] uppercase tracking-[0.22em] text-zinc-300">
             Shop by Variety
@@ -127,7 +116,7 @@ export default function SeasonBoxes() {
                 stiffness: 220,
                 damping: 18,
               }}
-              className="group relative flex h-full flex-col overflow-hidden rounded-[28px] border border-white/5 bg-zinc-950/50 backdrop-blur-xl"
+              className="group relative flex h-full flex-col overflow-hidden rounded-[28px] border border-white/5 bg-zinc-950/90"
             >
               <div className="absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100">
                 <div className="absolute inset-0 bg-gradient-to-br from-mango/10 via-transparent to-orange-500/5" />

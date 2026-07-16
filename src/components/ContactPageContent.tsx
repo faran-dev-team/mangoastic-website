@@ -38,21 +38,19 @@ const containerVariants: Variants = {
 };
 
 const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 48, filter: "blur(10px)" },
+  hidden: { opacity: 0, y: 48 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: { duration: 0.9, ease: "easeOut" },
   },
 };
 
 const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 40, filter: "blur(8px)" },
+  hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: { duration: 0.85, ease: "easeOut" },
   },
 };
@@ -158,7 +156,7 @@ export default function ContactPageContent() {
   return (
     <div className="overflow-x-hidden bg-black text-white">
       <section className="relative overflow-hidden px-4 py-14 sm:px-6 sm:py-16 md:px-8 md:py-20">
-        <div className="pointer-events-none absolute left-1/2 top-0 h-[280px] w-[min(100%,520px)] -translate-x-1/2 rounded-full bg-mango/6 blur-3xl" />
+        <div className="pointer-events-none absolute left-1/2 top-0 h-[280px] w-[min(100%,520px)] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,163,10,0.08),transparent_70%)]" aria-hidden />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
         <motion.div
@@ -191,7 +189,7 @@ export default function ContactPageContent() {
       </section>
 
       <section className="relative overflow-hidden px-4 pb-20 sm:px-6 sm:pb-24 md:px-8 md:pb-28">
-        <div className="pointer-events-none absolute right-0 top-[8%] h-[240px] w-[240px] translate-x-1/3 rounded-full bg-orange-500/8 blur-3xl" />
+        <div className="pointer-events-none absolute right-0 top-[8%] h-[240px] w-[240px] translate-x-1/3 rounded-full bg-[radial-gradient(circle,rgba(249,115,22,0.1),transparent_70%)]" aria-hidden />
 
         <motion.div
           variants={containerVariants}

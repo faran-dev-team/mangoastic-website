@@ -35,21 +35,19 @@ const containerVariants: Variants = {
 };
 
 const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 48, filter: "blur(10px)" },
+  hidden: { opacity: 0, y: 48 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: { duration: 0.9, ease: "easeOut" },
   },
 };
 
 const faqItemVariants: Variants = {
-  hidden: { opacity: 0, y: 36, filter: "blur(8px)" },
+  hidden: { opacity: 0, y: 36 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: { duration: 0.8, ease: "easeOut" },
   },
 };
@@ -62,7 +60,7 @@ export default function SeasonPassFaqMini() {
       className="relative overflow-hidden border-t border-zinc-800/80 bg-black px-4 py-16 sm:px-6 sm:py-20 md:px-8 md:py-24"
       aria-labelledby="season-pass-faq-heading"
     >
-      <div className="absolute left-[-8%] bottom-[15%] h-[220px] w-[220px] rounded-full bg-orange-500/8 blur-3xl" />
+      <div className="pointer-events-none absolute left-[-8%] bottom-[15%] h-[220px] w-[220px] rounded-full bg-[radial-gradient(circle,rgba(249,115,22,0.1),transparent_70%)]" aria-hidden />
 
       <motion.div
         variants={containerVariants}
@@ -131,7 +129,7 @@ export default function SeasonPassFaqMini() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+                      transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
                       className="overflow-hidden"
                     >
                       <p className="max-w-2xl border-l-2 border-mango/35 pb-5 pl-5 font-outfit text-sm leading-relaxed text-zinc-400 sm:pb-6 sm:pl-6 sm:text-[0.9375rem] sm:leading-relaxed">
@@ -148,7 +146,7 @@ export default function SeasonPassFaqMini() {
         <motion.div variants={fadeUp} className="mt-10 flex justify-center sm:mt-12">
           <Link
             href="/faq"
-            className="inline-flex cursor-pointer items-center justify-center rounded-full border border-white/35 bg-white/5 px-7 py-3.5 font-outfit text-sm font-semibold text-white backdrop-blur-sm transition hover:border-mango/50 hover:text-mango focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mango"
+            className="inline-flex cursor-pointer items-center justify-center rounded-full border border-white/35 bg-white/[0.08] px-7 py-3.5 font-outfit text-sm font-semibold text-white transition hover:border-mango/50 hover:text-mango focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mango"
           >
             View all FAQs
           </Link>

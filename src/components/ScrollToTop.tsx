@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronUp } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
@@ -9,15 +9,29 @@ const SCROLL_THRESHOLD = 400;
 export default function ScrollToTop() {
   const [visible, setVisible] = useState(false);
   const shouldReduceMotion = useReducedMotion();
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const onScroll = () => {
+    const update = () => {
       setVisible(window.scrollY > SCROLL_THRESHOLD);
+      rafRef.current = null;
     };
 
-    onScroll();
+    const onScroll = () => {
+      if (rafRef.current !== null) {
+        return;
+      }
+      rafRef.current = window.requestAnimationFrame(update);
+    };
+
+    update();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (rafRef.current !== null) {
+        window.cancelAnimationFrame(rafRef.current);
+      }
+    };
   }, []);
 
   const scrollToTop = useCallback(() => {

@@ -3,11 +3,10 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { motion, useReducedMotion, Variants } from "framer-motion";
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
+import { ensureGsapScrollTrigger, gsap } from "@/lib/gsap";
 import { corporateWhatsappLink } from "@/data/contact";
 
-gsap.registerPlugin(ScrollTrigger);
+ensureGsapScrollTrigger();
 
 const containerVariants: Variants = {
   hidden: {},
@@ -17,11 +16,10 @@ const containerVariants: Variants = {
 };
 
 const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 36, filter: "blur(8px)" },
+  hidden: { opacity: 0, y: 36 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: { duration: 0.85, ease: "easeOut" },
   },
 };
@@ -103,11 +101,10 @@ export default function CorporateLeadAndClosing() {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         ".corp-closing-reveal",
-        { opacity: 0, y: 50, filter: "blur(10px)" },
+        { opacity: 0, y: 50 },
         {
           opacity: 1,
           y: 0,
-          filter: "blur(0px)",
           duration: 1.1,
           ease: "power3.out",
           stagger: 0.14,
@@ -157,8 +154,6 @@ export default function CorporateLeadAndClosing() {
       requirements: requirements.trim() || null,
     };
 
-    console.log("[Corporate quote form]", formData);
-
     const message = buildQuoteWhatsAppMessage({
       company: formData.company,
       name: formData.name,
@@ -188,11 +183,7 @@ export default function CorporateLeadAndClosing() {
       ref={sectionRef}
       className="relative overflow-hidden border-t border-zinc-800/80 bg-black"
     >
-      <motion.div
-        className="corp-form-glow absolute left-1/2 top-[20%] h-[320px] w-[320px] -translate-x-1/2 rounded-full bg-mango/8 blur-3xl"
-        animate={prefersReducedMotion ? undefined : { y: [0, -16, 0] }}
-        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-      />
+      <div className="corp-form-glow pointer-events-none absolute left-1/2 top-[20%] h-[320px] w-[320px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,163,10,0.1),transparent_70%)]" aria-hidden />
       <motion.div
         initial={{ scaleX: 0 }}
         whileInView={{ scaleX: 1 }}
@@ -461,7 +452,7 @@ export default function CorporateLeadAndClosing() {
           whileHover={{ scale: 1.03, y: -4 }}
           whileTap={{ scale: 0.98 }}
           transition={{ type: "spring", stiffness: 320, damping: 20 }}
-          className="corp-closing-reveal group mt-8 inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-white/40 bg-white/5 px-8 py-4 font-outfit text-sm font-semibold text-white backdrop-blur-sm transition hover:border-white/60 hover:bg-white/10 hover:shadow-[0_0_35px_-12px_rgba(255,163,10,0.35)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50"
+          className="corp-closing-reveal group mt-8 inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-white/40 bg-white/[0.08] px-8 py-4 font-outfit text-sm font-semibold text-white transition hover:border-white/60 hover:bg-white/10 hover:shadow-[0_0_35px_-12px_rgba(255,163,10,0.35)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50"
         >
           <MessageCircle
             className="h-5 w-5 shrink-0 text-white transition-colors duration-300 group-hover:text-mango"

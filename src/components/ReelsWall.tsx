@@ -11,10 +11,9 @@ import type { CustomArrowProps, Settings } from "react-slick";
 
 import { motion } from "framer-motion";
 
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
+import { ensureGsapScrollTrigger, gsap } from "@/lib/gsap";
 
-gsap.registerPlugin(ScrollTrigger);
+import "@/styles/reels-slick.css";
 
 const Slider = dynamic(() => import("react-slick"), {
   ssr: false,
@@ -25,60 +24,58 @@ const Slider = dynamic(() => import("react-slick"), {
   ),
 });
 
+/**
+ * Prefer local /reels/*.mp4 when present; otherwise use a direct MP4 fallback.
+ * (Previous Pexels "download" page URLs were not playable video sources.)
+ */
 const DEMO_REELS = [
   {
     id: 1,
     label: "Customer unboxing",
     thumbnail: "/images/mango1.jpg",
     sources: [
-      "/reels/reel-1.mp4",
-      "https://www.pexels.com/download/video/1583289/",
-    ],
+      "https://download.samplelib.com/mp4/sample-5s.mp4",
+    ] as const,
   },
   {
     id: 2,
     label: "From the orchard",
     thumbnail: "/images/mango2.jpg",
     sources: [
-      "/reels/reel-2.mp4",
-      "https://www.pexels.com/download/video/7788779/",
-    ],
+      "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+    ] as const,
   },
   {
     id: 3,
     label: "First bite",
     thumbnail: "/images/mango3.jpg",
     sources: [
-      "/reels/reel-3.mp4",
-      "https://www.pexels.com/download/video/31775966/",
-    ],
+      "https://www.w3schools.com/html/mov_bbb.mp4",
+    ] as const,
   },
   {
     id: 4,
     label: "ASMR slice",
     thumbnail: "/images/mango4.jpg",
     sources: [
-      "/reels/reel-4.mp4",
-      "https://www.pexels.com/download/video/11760122/",
-    ],
+      "https://download.samplelib.com/mp4/sample-5s.mp4",
+    ] as const,
   },
   {
     id: 5,
     label: "Founder note",
     thumbnail: "/images/mango5.jpg",
     sources: [
-      "/reels/reel-5.mp4",
-      "https://www.pexels.com/download/video/32636776/",
-    ],
+      "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+    ] as const,
   },
   {
     id: 6,
     label: "Season pass",
-    thumbnail: "/images/hero.png",
+    thumbnail: "/images/hero.jpg",
     sources: [
-      "/reels/reel-6.mp4",
-      "https://www.pexels.com/download/video/8677691/",
-    ],
+      "https://www.w3schools.com/html/mov_bbb.mp4",
+    ] as const,
   },
 ] as const;
 
@@ -179,14 +176,13 @@ function subscribeReelsLayout(onStoreChange: () => void) {
   const tabletMq = window.matchMedia("(min-width: 768px) and (max-width: 1023px)");
   const onChange = () => onStoreChange();
 
+  // matchMedia "change" already covers viewport breakpoints — no resize listener needed.
   mobileMq.addEventListener("change", onChange);
   tabletMq.addEventListener("change", onChange);
-  window.addEventListener("resize", onChange);
 
   return () => {
     mobileMq.removeEventListener("change", onChange);
     tabletMq.removeEventListener("change", onChange);
-    window.removeEventListener("resize", onChange);
   };
 }
 
@@ -304,7 +300,14 @@ function ReelSlideCard({
             poster={thumbnail}
             src={activeSrc}
             onError={() => {
-              setSrcIndex((idx) => (idx + 1 < sources.length ? idx + 1 : idx));
+              setSrcIndex((idx) => {
+                if (idx + 1 < sources.length) {
+                  return idx + 1;
+                }
+                // No more sources — return to poster instead of holding a broken buffer.
+                onPause();
+                return idx;
+              });
             }}
           />
         ) : (
@@ -316,7 +319,7 @@ function ReelSlideCard({
               duration: 1.2,
               ease: "easeOut",
             }}
-            className="h-full w-full"
+            className="relative h-full w-full"
           >
             <Image
               src={thumbnail}
@@ -363,16 +366,6 @@ function ReelSlideCard({
               whileTap={{
                 scale: 0.95,
               }}
-              animate={{
-                y: [0, -4, 0],
-              }}
-              transition={{
-                y: {
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                },
-              }}
               type="button"
               onClick={onPlay}
               className="group/play relative flex h-[4.4rem] w-[4.4rem] items-center justify-center overflow-hidden rounded-full border border-white/20 bg-white/10 text-white shadow-[0_8px_40px_rgba(0,0,0,0.45)] backdrop-blur-2xl"
@@ -408,6 +401,8 @@ export default function ReelsWall() {
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    ensureGsapScrollTrigger();
+
     const ctx = gsap.context(() => {
       gsap.fromTo(
         ".reels-heading",
@@ -426,14 +421,6 @@ export default function ReelsWall() {
           },
         },
       );
-
-      gsap.to(".floating-reels-glow", {
-        y: -25,
-        duration: 6,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
     }, sectionRef);
 
     return () => ctx.revert();

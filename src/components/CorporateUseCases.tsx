@@ -28,21 +28,19 @@ const containerVariants: Variants = {
 };
 
 const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
+  hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: { duration: 0.9, ease: "easeOut" },
   },
 };
 
 const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 36, filter: "blur(8px)" },
+  hidden: { opacity: 0, y: 36 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: { duration: 0.85, ease: "easeOut" },
   },
 };
@@ -54,11 +52,7 @@ export default function CorporateUseCases() {
       aria-labelledby="corporate-use-cases-heading"
     >
       <div className="absolute right-[-6%] top-[15%] h-[260px] w-[260px] rounded-full bg-mango/10 blur-3xl" />
-      <motion.div
-        className="absolute bottom-[-10%] left-[-8%] h-[300px] w-[300px] rounded-full bg-orange-500/8 blur-3xl"
-        animate={{ y: [0, -18, 0] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-      />
+      <div className="absolute bottom-[-10%] left-[-8%] h-[300px] w-[300px] rounded-full bg-orange-500/8 blur-3xl" />
       <motion.div
         initial={{ scaleX: 0 }}
         whileInView={{ scaleX: 1 }}

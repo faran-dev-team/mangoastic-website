@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import ScrollToTop from "@/components/ScrollToTop";
+import SiteChrome from "@/components/SiteChrome";
 
 /** PDF brand combo: Outfit (simple UI / body), “Sirelia” = Playfair Display (titles / display). */
 const outfit = Outfit({
@@ -41,10 +39,7 @@ export default function RootLayout({
         className="min-h-full flex flex-col font-outfit"
         suppressHydrationWarning
       >
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <ScrollToTop />
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );

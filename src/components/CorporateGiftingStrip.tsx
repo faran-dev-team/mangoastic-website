@@ -6,12 +6,11 @@ import { MessageCircle } from "lucide-react";
 
 import { motion } from "framer-motion";
 
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
+import { ensureGsapScrollTrigger, gsap } from "@/lib/gsap";
 
 import { corporateWhatsappLink } from "@/data/contact";
 
-gsap.registerPlugin(ScrollTrigger);
+ensureGsapScrollTrigger();
 
 const CORPORATE_WHATSAPP_HREF = corporateWhatsappLink(
   "Hi Mangoastic — I'd like a quote for corporate gifting.",
@@ -29,13 +28,11 @@ export default function CorporateGiftingStrip() {
           opacity: 0,
           y: 80,
           scale: 0.96,
-          filter: "blur(10px)",
         },
         {
           opacity: 1,
           y: 0,
           scale: 1,
-          filter: "blur(0px)",
           duration: 1.4,
           ease: "power3.out",
           scrollTrigger: {
@@ -44,26 +41,6 @@ export default function CorporateGiftingStrip() {
           },
         },
       );
-
-      // Ambient glow floating
-      gsap.to(".corporate-glow", {
-        y: -30,
-        x: 12,
-        duration: 7,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
-
-      // Number pulse
-      gsap.to(".corporate-number", {
-        opacity: 0.75,
-        duration: 1.8,
-        repeat: -1,
-        yoyo: true,
-        ease: "power1.inOut",
-        stagger: 0.15,
-      });
     }, sectionRef);
 
     return () => ctx.revert();
@@ -75,9 +52,9 @@ export default function CorporateGiftingStrip() {
       className="relative overflow-hidden bg-black px-4 py-14 sm:px-6 sm:py-16 md:py-20"
     >
       {/* Ambient Background Glow */}
-      <div className="corporate-glow absolute left-[8%] top-[15%] h-[260px] w-[260px] rounded-full bg-amber-500/10 blur-3xl" />
+      <div className="corporate-glow pointer-events-none absolute left-[8%] top-[15%] h-[260px] w-[260px] rounded-full bg-[radial-gradient(circle,rgba(245,158,11,0.12),transparent_70%)]" aria-hidden />
 
-      <div className="absolute bottom-[-10%] right-[5%] h-[320px] w-[320px] rounded-full bg-orange-500/10 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-[-10%] right-[5%] h-[320px] w-[320px] rounded-full bg-[radial-gradient(circle,rgba(249,115,22,0.12),transparent_70%)]" aria-hidden />
 
       {/* Section Divider */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
@@ -90,7 +67,7 @@ export default function CorporateGiftingStrip() {
           duration: 0.5,
           ease: [0.22, 1, 0.36, 1],
         }}
-        className="corporate-card relative mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-white/10 bg-[#121212]/90 p-8 shadow-[0_35px_120px_-28px_rgba(0,0,0,0.82)] backdrop-blur-2xl sm:p-10 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-16 lg:gap-y-8 lg:p-14"
+        className="corporate-card relative mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-white/10 bg-[#121212]/95 p-8 shadow-[0_35px_120px_-28px_rgba(0,0,0,0.82)] sm:p-10 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-16 lg:gap-y-8 lg:p-14"
       >
         {/* Glass Glow Layer */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(251,191,36,0.08),transparent_35%)]" />
@@ -121,7 +98,7 @@ export default function CorporateGiftingStrip() {
               duration: 0.7,
             }}
             viewport={{ once: true }}
-            className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 backdrop-blur-xl"
+            className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.06] px-4 py-1.5"
           >
             <span className="font-outfit text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-400/90 sm:text-xs">
               Corporate gifting
@@ -227,7 +204,7 @@ export default function CorporateGiftingStrip() {
             {/* Secondary CTA (Optional Later)
             <Link
               href="/corporate"
-              className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.03] px-7 py-4 font-outfit text-sm font-semibold text-white backdrop-blur-xl transition-all duration-500 hover:border-amber-400/40 hover:bg-white/[0.06] hover:text-amber-200"
+              className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.06] px-7 py-4 font-outfit text-sm font-semibold text-white transition-all duration-500 hover:border-amber-400/40 hover:bg-white/[0.08] hover:text-amber-200"
             >
               Learn more
             </Link>
