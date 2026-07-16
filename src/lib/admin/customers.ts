@@ -2,6 +2,7 @@ import {
   ADMIN_CUSTOMERS_ENDPOINT,
   ADMIN_CUSTOMERS_REQUEST_TIMEOUT_MS,
   adminCustomerDetailEndpoint,
+  assertApiConfigured,
 } from "@/lib/config";
 import type {
   AdminCustomerDetail,
@@ -97,6 +98,8 @@ async function requestJson<TSuccess extends ApiSuccessResponse<unknown>, TResult
   signal: AbortSignal | undefined,
   map: (body: TSuccess) => TResult,
 ): Promise<TResult> {
+  assertApiConfigured();
+
   const controller = new AbortController();
   const timeoutId = window.setTimeout(
     () => controller.abort(),

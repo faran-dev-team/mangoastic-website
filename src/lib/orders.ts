@@ -1,4 +1,8 @@
-import { ORDERS_ENDPOINT, ORDER_REQUEST_TIMEOUT_MS } from "@/lib/config";
+import {
+  ORDERS_ENDPOINT,
+  ORDER_REQUEST_TIMEOUT_MS,
+  assertApiConfigured,
+} from "@/lib/config";
 
 export type CreateOrderPayload = {
   customerName: string;
@@ -59,6 +63,8 @@ export class OrderApiError extends Error {
 export async function createOrder(
   payload: CreateOrderPayload,
 ): Promise<CreateOrderSuccessData> {
+  assertApiConfigured();
+
   const controller = new AbortController();
   const timeoutId = window.setTimeout(
     () => controller.abort(),

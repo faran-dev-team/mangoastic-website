@@ -4,6 +4,7 @@ import {
   ADMIN_ORDERS_REQUEST_TIMEOUT_MS,
   adminOrderDetailEndpoint,
   adminOrderStatusEndpoint,
+  assertApiConfigured,
 } from "@/lib/config";
 import { serializeOrderQuery } from "@/lib/admin/orderQuery";
 import type {
@@ -218,6 +219,8 @@ async function requestJson<TSuccess extends ApiSuccessResponse<unknown>, TResult
   mapData: (body: TSuccess) => TResult,
   options?: RequestJsonOptions,
 ): Promise<TResult> {
+  assertApiConfigured();
+
   const controller = new AbortController();
   const timeoutId = window.setTimeout(
     () => controller.abort(),

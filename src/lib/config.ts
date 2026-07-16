@@ -1,30 +1,47 @@
 /**
  * Frontend environment / API configuration.
  * Values come from NEXT_PUBLIC_* env vars — never hardcode production URLs.
+ *
+ * NEXT_PUBLIC_* values are inlined at build time. Missing vars must not throw
+ * during `next build` / prerender (Vercel), or the deploy fails. API helpers
+ * call `assertApiConfigured()` when a request is actually made.
  */
 
-function requirePublicEnv(name: string, fallback?: string): string {
+function readPublicEnv(name: string, devFallback?: string): string {
   const fromEnv = process.env[name]?.trim();
-  const isProduction = process.env.NODE_ENV === "production";
-
-  // Production builds must never silently fall back to localhost.
-  if (!fromEnv) {
-    if (isProduction || !fallback) {
-      throw new Error(
-        `Missing environment variable ${name}. Set it in Vercel / .env.local before building.`,
-      );
-    }
-    return fallback.replace(/\/$/, "");
+  if (fromEnv) {
+    return fromEnv.replace(/\/$/, "");
   }
 
-  return fromEnv.replace(/\/$/, "");
+  // Local/dev convenience only — never bake localhost into a production bundle
+  // unless the operator explicitly set NEXT_PUBLIC_API_URL.
+  if (process.env.NODE_ENV !== "production" && devFallback) {
+    return devFallback.replace(/\/$/, "");
+  }
+
+  return "";
 }
 
-/** Backend base URL, e.g. http://localhost:5000 */
-export const API_BASE_URL = requirePublicEnv(
+/** Backend base URL, e.g. https://api.example.com — empty until set in Vercel. */
+export const API_BASE_URL = readPublicEnv(
   "NEXT_PUBLIC_API_URL",
-  process.env.NODE_ENV === "production" ? undefined : "http://localhost:5000",
+  "http://localhost:5000",
 );
+
+/** True when a usable API base URL is configured. */
+export const isApiConfigured = API_BASE_URL.length > 0;
+
+/**
+ * Throws a clear error when API calls run without NEXT_PUBLIC_API_URL.
+ * Safe at request time; does not break static builds.
+ */
+export function assertApiConfigured(): void {
+  if (!isApiConfigured) {
+    throw new Error(
+      "Missing NEXT_PUBLIC_API_URL. Set it in Vercel (Project → Settings → Environment Variables) to your Render backend URL (no trailing slash), then redeploy.",
+    );
+  }
+}
 
 export const ORDERS_ENDPOINT = `${API_BASE_URL}/api/orders`;
 

@@ -2,6 +2,7 @@ import {
   ADMIN_LOGIN_ENDPOINT,
   ADMIN_PROFILE_ENDPOINT,
   AUTH_REQUEST_TIMEOUT_MS,
+  assertApiConfigured,
 } from "@/lib/config";
 import type {
   AdminLoginPayload,
@@ -33,6 +34,8 @@ type ProfileSuccessResponse = ApiSuccessResponse<AdminPublicProfile>;
 export async function loginAdmin(
   payload: AdminLoginPayload,
 ): Promise<AdminLoginSuccessData> {
+  assertApiConfigured();
+
   const controller = new AbortController();
   const timeoutId = window.setTimeout(
     () => controller.abort(),
@@ -88,6 +91,8 @@ export async function fetchAdminProfile(
   token: string,
   signal?: AbortSignal,
 ): Promise<AdminPublicProfile> {
+  assertApiConfigured();
+
   const controller = new AbortController();
   const timeoutId = window.setTimeout(
     () => controller.abort(),

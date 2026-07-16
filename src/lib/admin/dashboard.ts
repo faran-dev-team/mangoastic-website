@@ -2,6 +2,7 @@ import {
   ADMIN_DASHBOARD_CHARTS_ENDPOINT,
   ADMIN_DASHBOARD_ENDPOINT,
   DASHBOARD_REQUEST_TIMEOUT_MS,
+  assertApiConfigured,
 } from "@/lib/config";
 import type {
   ApiErrorDetail,
@@ -40,6 +41,8 @@ export async function fetchDashboardSummary(
   token: string,
   signal?: AbortSignal,
 ): Promise<DashboardSummary> {
+  assertApiConfigured();
+
   const controller = new AbortController();
   const timeoutId = window.setTimeout(
     () => controller.abort(),
@@ -98,6 +101,8 @@ export async function fetchDashboardCharts(
   token: string,
   signal?: AbortSignal,
 ): Promise<DashboardCharts> {
+  assertApiConfigured();
+
   const controller = new AbortController();
   const timeoutId = window.setTimeout(
     () => controller.abort(),
