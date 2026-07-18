@@ -2,13 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, MessageCircle } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import { motion, Variants } from "framer-motion";
 import { useEffect, useRef } from "react";
 
 import { gsap } from "@/lib/gsap";
 import { WHATSAPP_HREF } from "@/data/contact";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 
 export default function Hero() {
   const heroRef = useRef<HTMLDivElement | null>(null);
@@ -200,10 +201,7 @@ Untouched.`}
               rel="noopener noreferrer"
               className="group inline-flex items-center justify-center gap-2.5 rounded-full border border-white/20 bg-white/5 px-8 py-4 font-outfit text-sm font-semibold text-white backdrop-blur-xl transition-all duration-500 hover:border-mango/40 hover:bg-white/10 hover:text-mango hover:shadow-[0_0_35px_-12px_rgba(255,163,10,0.45)]"
             >
-              <MessageCircle
-                className="h-4 w-4 transition-transform duration-300 group-hover:scale-110"
-                strokeWidth={2}
-              />
+              <WhatsAppIcon className="h-4 w-4 shrink-0 text-[#25D366] transition-transform duration-300 group-hover:scale-110" />
 
               <span>Or order on WhatsApp</span>
             </a>

@@ -2,13 +2,13 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-import { MessageCircle } from "lucide-react";
 
 import { motion } from "framer-motion";
 
 import { ensureGsapScrollTrigger, gsap } from "@/lib/gsap";
 
 import { corporateWhatsappLink } from "@/data/contact";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 
 ensureGsapScrollTrigger();
 
@@ -193,10 +193,9 @@ export default function CorporateGiftingStrip() {
               {/* Shine Sweep */}
               <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
 
-              <MessageCircle
-                className="relative z-10 h-4 w-4 shrink-0 sm:h-[1.125rem] sm:w-[1.125rem]"
-                strokeWidth={2}
-              />
+              <span className="relative z-10 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white sm:h-[1.375rem] sm:w-[1.375rem]">
+                <WhatsAppIcon className="h-3.5 w-3.5 text-[#25D366] sm:h-4 sm:w-4" />
+              </span>
 
               <span className="relative z-10">Get a quote on WhatsApp</span>
             </motion.a>
